@@ -4,8 +4,6 @@ import { firebase } from '../config';
 
 export default function AddParkingPayment({ userId, operatorName}) {
   const [amount, setAmount] = useState('');
-  const [start_time, setStartTime] = useState('');
-  const [duration, setDuration] = useState('');
   const [error, setError] = useState(null);
 
   const handleAddPayment = async () => {
@@ -55,38 +53,9 @@ export default function AddParkingPayment({ userId, operatorName}) {
         value={amount}
         style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10 }}
       />
-      {error && <Text>{error}</Text>}
       <TouchableOpacity onPress={handleAddPayment} style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}>
         <Text style={{ color: 'white', textAlign: 'center' }}>Add Payment</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 10,
-    padding: 10,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-});
