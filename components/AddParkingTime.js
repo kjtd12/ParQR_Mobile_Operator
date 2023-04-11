@@ -6,20 +6,8 @@ import { database } from 'firebase/compat/database';
 const auth = firebase.auth()
 
 export default function AddParkingTime({ userId }){
-  const [operator_name, setOperatorName] = useState('')
+  // const [operator_name, setOperatorName] = useState('')
   const [parkingTime, setParkingTime] = useState('');
-
-  useEffect(() => { //Get User's Name
-    firebase.firestore().collection('operators')
-    .doc(auth.currentUser.uid).get()
-    .then((snapshot) => {
-      if(snapshot.exists){
-        setOperatorName(snapshot.data().name)
-      } else {
-        console.log('user does not exist')
-      }
-    })
-  })
 
   const handleAddParkingTime = () => {
     const now = Date.now();

@@ -19,7 +19,7 @@ export default function ScanAndAddTransaction() {
     .doc(firebase.auth().currentUser.uid).get()
     .then((snapshot) => {
       if(snapshot.exists){
-        setOperatorName(snapshot.data())
+        setOperatorName(snapshot.data().name)
       } else {
         console.log(firebase.auth().currentUser.uid)
         console.log('user does not exist')

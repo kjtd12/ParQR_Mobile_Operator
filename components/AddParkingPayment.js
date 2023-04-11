@@ -16,28 +16,36 @@ export default function AddParkingPayment({ userId, operatorName}) {
       const db = firebase.firestore();
       const userRef = db.collection('users').doc(userId);
       const userSnapshot = await userRef.get();
-      const parkingRef = firebase.database().ref('users/' + userId);
-      if (userSnapshot.exists) {
-        const userData = userSnapshot.data();
-        const { e_wallet } = userData;
-        if (e_wallet >= amount) {
-          await userRef.update({
-            e_wallet: e_wallet - amount,
-          });
-          parkingRef.child('parking_time').once('value', (snapshot) => {
-            const parkingTimeData = snapshot.val();
-            parkingRef.child('parking_time_history').push({
-                operator_name: operatorName,
-                start_time: parkingTimeData.start_time,
-                duration: parkingTimeData.duration,
-                payment: amount
-              });
-          })
-          alert('Parking Paid');
-        } else {
-          setError('Insufficient funds');
-        }
+
+      if (!userSnapshot.exists) {
+        setError('User does not exist');
+        return;
       }
+
+      const userData = userSnapshot.data();
+      const { e_wallet } = userData;
+
+      if (e_wallet < amount) {
+        setError('Insufficient funds');
+        return;
+      }
+
+      await userRef.update({
+        e_wallet: e_wallet - amount,
+      });
+
+      const parkingRef = firebase.database().ref(`users/${userId}`);
+      const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
+      const parkingTimeData = parkingTimeSnapshot.val();
+
+      await parkingRef.child('parking_time_history').push({
+        operator_name: operatorName,
+        start_time: parkingTimeData.start_time,
+        duration: parkingTimeData.duration,
+        payment: amount,
+      });
+
+      alert('Parking Paid');
     } catch (error) {
       console.error(error);
       setError('An error occurred while adding payment');
