@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { firebase } from '../config';
 
-const AddTransaction = ({ userId }) => {
-  const [datetime, setDatetime] = useState('');
+export default function AddTransaction({ userId }){
   const [amount, setAmount] = useState('');
 
   const handleAddTransaction = async  () => {
@@ -48,5 +47,3 @@ const AddTransaction = ({ userId }) => {
     </View>
   );
 };
-
-export default AddTransaction;

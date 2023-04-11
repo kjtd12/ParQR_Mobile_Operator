@@ -12,7 +12,6 @@ export default function ScanAndAddTransaction() {
   const [scanned, setScanned] = useState(false);
   const [result, setResult] = useState(null);
   const [operatorName, setOperatorName] = useState(null);
-  const [timerStarted, setTimerStarted] = useState(false);
   const db = firebase.firestore();
 
   useEffect(() => { //get operator's name

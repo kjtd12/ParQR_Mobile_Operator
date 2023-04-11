@@ -5,13 +5,13 @@ import { database } from 'firebase/compat/database';
 
 const auth = firebase.auth()
 
-const AddParkingTime = ({ userId }) => {
+export default function AddParkingTime({ userId }){
     const [operator_name, setOperatorName] = useState('')
   const [parkingTime, setParkingTime] = useState('');
 
   useEffect(() => { //Get User's Name
     firebase.firestore().collection('operators')
-    .doc(firebase.auth().currentUser.uid).get()
+    .doc(auth.currentUser.uid).get()
     .then((snapshot) => {
       if(snapshot.exists){
         setOperatorName(snapshot.data().name)
@@ -54,5 +54,3 @@ const AddParkingTime = ({ userId }) => {
     </View>
   );
 };
-
-export default AddParkingTime;

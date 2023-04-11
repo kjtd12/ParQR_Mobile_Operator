@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { firebase } from '../config';
 
 export default function AddParkingPayment({ userId, operatorName}) {
@@ -47,17 +47,18 @@ export default function AddParkingPayment({ userId, operatorName}) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Add Parking Payment</Text>
+    <View style={{ padding: 20 }}>
       <TextInput
-        style={styles.input}
         placeholder="Enter amount"
         keyboardType="numeric"
         onChangeText={(text) => setAmount(text)}
         value={amount}
+        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10 }}
       />
-      {error && <Text style={styles.error}>{error}</Text>}
-      <Button title="Add Payment" onPress={handleAddPayment} />
+      {error && <Text>{error}</Text>}
+      <TouchableOpacity onPress={handleAddPayment} style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}>
+        <Text style={{ color: 'white', textAlign: 'center' }}>Add Payment</Text>
+      </TouchableOpacity>
     </View>
   );
 }
