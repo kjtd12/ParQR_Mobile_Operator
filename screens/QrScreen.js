@@ -12,6 +12,7 @@ export default function ScanAndAddTransaction() {
   const [scanned, setScanned] = useState(false);
   const [result, setResult] = useState(null);
   const [operatorName, setOperatorName] = useState(null);
+  const [operatorUid, setOperatorUid] = useState(null);
   const db = firebase.firestore();
 
   useEffect(() => { //get operator's name
@@ -20,6 +21,7 @@ export default function ScanAndAddTransaction() {
     .then((snapshot) => {
       if(snapshot.exists){
         setOperatorName(snapshot.data().name)
+        setOperatorUid(firebase.auth().currentUser.uid)
       } else {
         console.log(firebase.auth().currentUser.uid)
         console.log('user does not exist')
@@ -72,7 +74,7 @@ export default function ScanAndAddTransaction() {
           <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
           <AddTransaction userId={userId} />
           <AddParkingTime userId={userId} />
-          <AddParkingPayment userId={userId} operatorName={operatorName} />
+          <AddParkingPayment userId={userId} operatorName={operatorName} operatorUid={operatorUid}/>
         </View>
       )}
       {result && <Text>{result.name}</Text>}

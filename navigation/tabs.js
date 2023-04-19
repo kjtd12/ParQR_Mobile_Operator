@@ -114,7 +114,7 @@ const Tabs = () => {
                     )
                 }}
             />
-            <Tab.Screen name="TransAction" component={TransactionsScreen}
+            <Tab.Screen name="Transaction" component={TransactionsScreen}
                 options={{ 
                 headerShown: false,
                 tabBarIcon: ({focused}) => (
