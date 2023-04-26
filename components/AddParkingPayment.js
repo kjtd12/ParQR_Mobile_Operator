@@ -137,6 +137,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   if (startTime === '00:00'){
     payment = 0;
   }
+  console.log(payment);
 
   return (
     <View style={{ padding: 20 }}>
