@@ -41,9 +41,9 @@ export default function AddTransaction({ userId }){
         value={amount}
         onChangeText={setAmount}
         keyboardType="numeric"
-        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10 }}
+        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, width: 200 }}
       />
-      <TouchableOpacity onPress={handleAddTransaction} style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}>
+      <TouchableOpacity onPress={handleAddTransaction} style={{ backgroundColor: 'blue', padding: 20, borderRadius: 5, width: 200 }}>
         <Text style={{ color: 'white', textAlign: 'center' }}>Top-up</Text>
       </TouchableOpacity>
     </View>

@@ -29,7 +29,7 @@ const TransactionsScreen = () => {
         const transactionsArray = Object.entries(data).map(([key, value]) => {
           return { key, ...value };
         });
-        setTransactions(transactionsArray);
+        setTransactions(Object.values(transactionsArray.reverse()));
       }
     };
   
@@ -74,7 +74,7 @@ const TransactionsScreen = () => {
  
   return (
     <View style={styles.container}>
-      <View style={[styles.searchContainer, { marginTop: 30 }]}>
+      <View style={[styles.searchContainer, { marginTop: 40 }]}>
         <Image
           source={{ uri: 'https://www.freeiconspng.com/uploads/search-icon-png-7.png' }}
           style={styles.searchIcon}
