@@ -1,22 +1,45 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { firebase } from '../config';
 import { database } from 'firebase/compat/database';
 
 const auth = firebase.auth()
 
 export default function AddParkingTime({ userId }){
-  const [parkingTime, setParkingTime] = useState('');
-  const [showPicker, setShowPicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
+  const [discount, setDiscount] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [carPlate, setCarPlate] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+
+  useEffect(() => {
+    firebase.firestore().collection('users')
+    .doc(userId).get()
+    .then((snapshot) => {
+      if(snapshot.exists){
+        setContactNumber(snapshot.data().number);
+        setUserName(snapshot.data().name);
+        const car = snapshot.data().vehicles.find((v) => v.isDefault)
+        setCarPlate(car ? car.plateNo : '');
+      } else {
+        console.log('user does not exist')
+      }
+    })
+  })
+
+  const handleDiscount = () => {
+    if (discount){
+      setDiscount(false);
+      return;
+    }
+    setDiscount(true);
+  }
 
   const handleAddParkingTime = () => {
-    const now = Date.now();
     const userRef = firebase.database().ref('users/' + userId);
-  
+    
     // Update current parking time
-    userRef.update({ parking_time: { start_time: now, duration: parkingTime } });
+    userRef.update({ parking_time: { start_time: startTime.getTime() } });
 
     const parkingRef = firebase.database().ref('parking_availability');
 
@@ -28,35 +51,27 @@ export default function AddParkingTime({ userId }){
       }
     });
 
+    const customerRef = firebase.database().ref('activeCustomer/' + userId);
+    customerRef.update({ 
+                        name: userName,  
+                        check_in_time: startTime.getTime(), 
+                        contact_number: contactNumber , 
+                        discount: discount,
+                        plate: carPlate
+                       })
 
-  
     // Alert user that parking time has been added
     alert('Parking time added successfully');
   };
 
-  const handleTimePicker = (event, selectedDate) => {
-    const currentDate = selectedDate || selectedDate;
-    setShowPicker(Platform.OS === 'ios');
-    setSelectedDate(currentDate);
-    const parkingTime = (currentDate.getTime() - new Date().getTime()) / (1000 * 60);
-    setParkingTime(Math.ceil(parkingTime));
-  };
-
   return (
     <View style={{ padding: 20 }}>
-      <TouchableOpacity onPress={() => setShowPicker(true)} style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10 }}>
-        <Text>{selectedDate.toLocaleString()}</Text>
+      <TouchableOpacity onPress={() => setStartTime(new Date())} style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10 }}>
+        <Text>{startTime.toLocaleString()}</Text>
       </TouchableOpacity>
-      {showPicker && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={selectedDate}
-          mode="time"
-          is24Hour={true}
-          display="default"
-          onChange={handleTimePicker}
-        />
-      )}
+      <TouchableOpacity onPress={handleDiscount} style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}>
+        <Text style={{ color: 'white', textAlign: 'center' }}>Discount</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={handleAddParkingTime} style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}>
         <Text style={{ color: 'white', textAlign: 'center' }}>Start Parking</Text>
       </TouchableOpacity>

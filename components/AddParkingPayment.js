@@ -14,7 +14,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
     parkingRef.on('value', (snapshot) => {
       const parkingTimeData = snapshot.val();
       setStartTime(parkingTimeData.start_time);
-      setDuration(parkingTimeData.duration);
+      setDuration((new Date().getTime() - parkingTimeData.start_time)/1000);
     });
   
     return () => {
@@ -22,10 +22,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
     };
   }, [userId]);
   
-
   const generateReferenceNumber = () => {
     const length = 10;
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const chars = '0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -80,14 +79,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         e_wallet: e_wallet - paymentAmount,
       });
   
-      const referenceNumber = generateReferenceNumber();
+      const referenceNumber = '800' + generateReferenceNumber();
   
       await parkingRef.child('parking_time_history').push({
         operator_name: operatorName,
         user_name: name,
         plate_no: plateNo,
         start_time: parkingTimeData.start_time,
-        duration: parkingTimeData.duration,
+        duration: duration,
         payment: paymentAmount,
         reference_number: referenceNumber,
       });
@@ -99,7 +98,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         user_name: name,
         plate_no: plateNo,
         start_time: parkingTimeData.start_time,
-        duration: parkingTimeData.duration,
+        duration: duration,
         payment: paymentAmount,
         reference_number: referenceNumber,
         date: date,
@@ -118,6 +117,10 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           console.log('Occupied spaces decremented successfully.');
         }
       });
+
+      const customerRef = firebase.database().ref('activeCustomer/' + userId);
+      customerRef.remove();
+      
   
       alert('Parking Paid');
     } catch (error) {
@@ -131,13 +134,12 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
   if (start_time !== 0 && duration !== 0) {
     startTime = new Date(start_time).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    endTime = new Date(start_time + duration * 60 * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    endTime = new Date(start_time + duration * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   }
 
   if (startTime === '00:00'){
     payment = 0;
   }
-  console.log(payment);
 
   return (
     <View style={{ padding: 20 }}>
