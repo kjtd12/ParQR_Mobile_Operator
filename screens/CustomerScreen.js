@@ -62,10 +62,12 @@ const CustomerScreen = () => {
 
   return (
     <View style={styles.container}>
-       <View style={[styles.searchContainer, { marginTop: 40 }]}>
-        <Image
-          source={{ uri: 'https://www.freeiconspng.com/uploads/search-icon-png-7.png' }}
-          style={styles.searchIcon}
+      <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: '#213A5C', fontSize: 20, fontWeight: 'bold', paddingBottom: 20, marginTop: 40 }}>Checked-In Customers</Text>
+      </View>
+       <View style={[styles.searchContainer]}>
+       <Image
+          source={ require('../assets/transactionIcons/Search.png') }
         />
         <TextInput
           style={styles.searchInput}

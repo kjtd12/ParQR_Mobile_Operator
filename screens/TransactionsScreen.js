@@ -37,12 +37,22 @@ const TransactionsScreen = () => {
       }
     };
   
+    const handleChildRemoved = (oldChildSnapshot) => {
+      // Remove the transaction from the state
+      setTransactions((transactions) =>
+        transactions.filter((transaction) => transaction.key !== oldChildSnapshot.key)
+      );
+    };
+  
     operatorTransactionsRef.on('value', handleData);
+    operatorTransactionsRef.on('child_removed', handleChildRemoved);
   
     return () => {
       operatorTransactionsRef.off('value', handleData);
+      operatorTransactionsRef.off('child_removed', handleChildRemoved);
     };
   }, [operatorUid]);
+  
 
   function filterAndSortTransactions(transactions, filterCurrentValue, sortCurrentValue, startDate, endDate) {
     let filteredTransactions = [...transactions];
@@ -177,10 +187,12 @@ const TransactionsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.searchContainer, { marginTop: 40 }]}>
+      <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: '#213A5C', fontSize: 20, fontWeight: 'bold', paddingBottom: 20, marginTop: 40 }}>Transaction History</Text>
+      </View>
+      <View style={[styles.searchContainer]}>
         <Image
-          source={{ uri: 'https://www.freeiconspng.com/uploads/search-icon-png-7.png' }}
-          style={styles.searchIcon}
+          source={ require('../assets/transactionIcons/Search.png') }
         />
         <TextInput
           style={styles.searchInput}

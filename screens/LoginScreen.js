@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/core'
 import React, {useState, useEffect} from 'react'
 import { firebase } from '../config'
@@ -78,6 +78,12 @@ const LoginScreen = () => {
             style={styles.container}
             behavior="padding"
         >
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Image 
+                    source={require('../assets/login.png')}
+                    style={{width: 220, height: 200}}
+                />
+            </View>
             <View style={styles.inputContainer}>
                 <View>
                     <TextInput
@@ -134,7 +140,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 5,
-        marginTop: 5
+        marginTop: 5,
+        borderWidth: 2,
+        borderColor: '#213A5C'
     },
     buttonContainer: {
         width: '60%',
