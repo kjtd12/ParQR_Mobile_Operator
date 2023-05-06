@@ -53,12 +53,12 @@ useEffect(() => {
   const handlePayNow = () => {
     console.log("cash: " + byCash)
     setByCash(true)
-    handlePayment();
+    handleFailedPayment();
     setDetailVisible(true);
     setConfigVisible(false);
   };
   
-  const handlePayment = async () => {
+  const handleFailedPayment = async () => {
     try {
       const db = firebase.firestore();
       const userRef = db.collection('users').doc(userId);
@@ -70,7 +70,7 @@ useEffect(() => {
       }
   
       const userData = userSnapshot.data();
-      const { e_wallet, name, vehicles, number } = userData;
+      const { name, vehicles, number } = userData;
   
       setUserName(name);
   
@@ -128,7 +128,7 @@ useEffect(() => {
         date: date,
       });
   
-      const generalTransactionsRef = firebase.database().ref(`transactions/${operatorUid}`);
+      const generalTransactionsRef = firebase.database().ref(`transactions`);
   
       await generalTransactionsRef.push({
         number: number,
@@ -253,7 +253,7 @@ useEffect(() => {
         date: date,
       });
 
-      const generalTransactionsRef = firebase.database().ref(`transactions/${operatorUid}`);
+      const generalTransactionsRef = firebase.database().ref(`transactions`);
   
       await generalTransactionsRef.push({
         number: number,

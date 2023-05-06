@@ -29,8 +29,15 @@ const CustomerScreen = () => {
       customerRef.off('child_removed', removedListener);
     };
   }, []);
-  
 
+  const filteredData = activeKeys.filter(key => {
+    const item = activeData[key];
+    const name = item.name.toLowerCase();
+    const plate = item.plate.toLowerCase();
+    const searchQueryLowerCase = searchQuery.toLowerCase();
+    return name.includes(searchQueryLowerCase) || plate.includes(searchQueryLowerCase);
+  });
+  
   const renderItem = ({ item }) => {
     const dataItem = activeData[item];
     console.log("data item: " + dataItem);
@@ -53,7 +60,7 @@ const CustomerScreen = () => {
           </View>
           <View style={styles.customerItemDescription}>
             <Text style={styles.customerItemDescriptionText}>Discount: </Text>
-            <Text style={styles.customerItemDescriptionText_1}>{dataItem.discount ? 'Yes' : 'No'}</Text>
+            <Text style={styles.customerItemDescriptionText_1}>{dataItem.discount}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -72,12 +79,12 @@ const CustomerScreen = () => {
         <TextInput
           style={styles.searchInput}
           placeholder="Search"
-          // onChangeText={handleSearch}
-          // value={searchQuery}
+          onChangeText={(query) => setSearchQuery(query)}
+          value={searchQuery}
         />
       </View>
       <FlatList
-        data={activeKeys}
+        data={filteredData}
         renderItem={renderItem}
         keyExtractor={(item) => item}
       />
