@@ -49,6 +49,7 @@ export default function ScanAndAddTransaction() {
     const docSnapshot = await docRef.get();
     if (!docSnapshot.exists) {
       setResult('No matching documents found');
+      setScanned(false);
     } else {
       const resultData = docSnapshot.data();
       setResult(resultData);

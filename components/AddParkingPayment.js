@@ -5,7 +5,7 @@ import { firebase } from '../config';
 export default function AddParkingPayment({ userId, operatorName, operatorUid }) {
   let [payment, setPayment] = useState(40);
   const [start_time, setStartTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  let [duration, setDuration] = useState(0);
   const [error, setError] = useState(null);
   const [vehicle, setVehicle] = useState(null);
   const [configVisible, setConfigVisible] = useState(false);
@@ -13,20 +13,24 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   const [userName, setUserName] = useState(null);
   const [byCash, setByCash] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
+  const [startTime, setStartingTime] = useState(0);
+  const [endTime, setEndingTime] = useState(0);
 
-useEffect(() => {
-  const parkingRef = firebase.database().ref(`users/${userId}/parking_time`);
-  parkingRef.on('value', (snapshot) => {
-    const parkingTimeData = snapshot.val();
-    setStartTime(parkingTimeData.start_time);
-    setDuration((new Date().getTime() - parkingTimeData.start_time)/1000);
-  });
 
-  return () => {
-    parkingRef.off();
-  };
-}, []);
+  useEffect(() => {
+    const parkingRef = firebase.database().ref(`users/${userId}/parking_time/start_time`);
+    parkingRef.on('value', (snapshot) => {
+      setStartTime(snapshot.val());
+      setDuration((new Date().getTime() - snapshot.val())/1000);
+    });
 
+    handleAddPayment();
+  
+    return () => {
+      parkingRef.off();
+    };
+  }, []);
+  
 
   useEffect(() => {
     firebase.firestore().collection('users')
@@ -89,6 +93,8 @@ useEffect(() => {
   
       const durationInHours = Math.ceil(parkingTimeData.duration / (60 * 60 * 1000));
       const additionalHours = durationInHours - 3;
+
+      console.log(duration)
   
       let paymentAmount = 40;
   
@@ -143,7 +149,6 @@ useEffect(() => {
   
       parkingRef.child('parking_time').update({
         start_time: 0,
-        duration: 0,
       });
   
       const parkingAvailabilityRef = firebase.database().ref('parking_availability');
@@ -195,6 +200,10 @@ useEffect(() => {
   
       const durationInHours = Math.ceil(parkingTimeData.duration / (60 * 60 * 1000));
       const additionalHours = durationInHours - 3;
+
+      console.log(duration)
+
+      duration = (new Date().getTime() - start_time)/1000;
   
       let paymentAmount = 40;
   
@@ -268,7 +277,6 @@ useEffect(() => {
 
       parkingRef.child('parking_time').update({
         start_time: 0,
-        duration: 0
       });
 
       const parkingAvailabilityRef = firebase.database().ref('parking_availability');
@@ -289,19 +297,21 @@ useEffect(() => {
     }
   };
 
-  const parkingRef = firebase.database().ref(`users/${userId}/parking_time_history`);
-
-  let startTime = '00:00';
-  let endTime = '00:00';
-
-  parkingRef.orderByChild('end_time').limitToLast(1).on('child_added', (snapshot) => {
-    const parkingTimeData = snapshot.val();
-    startTime = new Date(parkingTimeData.start_time).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    endTime = new Date(parkingTimeData.start_time + parkingTimeData.duration * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  });
-
   useEffect(() => {
-    handleAddPayment();
+    const parkingRef = firebase.database().ref(`users/${userId}/parking_time_history`);
+    const query = parkingRef.orderByChild('end_time').limitToLast(1);
+
+    const handleChildAdded = (snapshot) => {
+      const parkingTimeData = snapshot.val();
+      setStartingTime((new Date(parkingTimeData.start_time).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })));
+      setEndingTime((new Date(parkingTimeData.start_time + parkingTimeData.duration * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })));
+    };
+
+    query.on('child_added', handleChildAdded);
+
+    return () => {
+      query.off('child_added', handleChildAdded);
+    };
   }, []);
 
   const profileImage = profilePicture ? { uri: profilePicture } : { uri: 'https://via.placeholder.com/150x150.png?text=Profile+Image' };
