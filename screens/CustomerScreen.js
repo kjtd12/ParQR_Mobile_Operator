@@ -6,6 +6,7 @@ import { database } from 'firebase/compat/database';
 const CustomerScreen = () => {
   const [activeData, setActiveData] = useState([]);
   const [activeKeys, setActiveKeys] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const customerRef = firebase.database().ref('activeCustomer/');
