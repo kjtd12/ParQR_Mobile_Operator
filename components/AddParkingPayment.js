@@ -163,6 +163,25 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       const customerRef = firebase.database().ref('activeCustomer/' + userId);
       customerRef.remove();
 
+      const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
+      const today = new Date().toISOString().slice(0, 10);
+
+      console.log(today);
+
+      transactionsCountAndRevenue.child(today).transaction((data) => {
+        if (data === null) {
+          return {
+            count: 1,
+            revenue: paymentAmount
+          };
+        } else {
+          return {
+            count: data.count + 1,
+            revenue: data.revenue + paymentAmount
+          };
+        }
+      });
+
     } catch (error) {
       console.error(error);
       setError('An error occurred while adding payment');
@@ -290,6 +309,25 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
       const customerRef = firebase.database().ref('activeCustomer/' + userId);
       customerRef.remove();
+
+      const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
+      const today = new Date().toISOString().slice(0, 10);
+
+      transactionsCountAndRevenue.child(today).transaction((data) => {
+        if (data === null) {
+          return {
+            count: 1,
+            revenue: paymentAmount
+          };
+        } else {
+          return {
+            count: data.count + 1,
+            revenue: data.revenue + paymentAmount
+          };
+        }
+      });
+
+
       
     } catch (error) {
       console.error(error);
