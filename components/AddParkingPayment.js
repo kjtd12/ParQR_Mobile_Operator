@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { firebase } from '../config';
 
 export default function AddParkingPayment({ userId, operatorName, operatorUid }) {
-  let [payment, setPayment] = useState(40);
+  let  [payment, setPayment] = useState(40);
   const [start_time, setStartTime] = useState(0);
   let [duration, setDuration] = useState(0);
   const [error, setError] = useState(null);
@@ -15,6 +15,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   const [profilePicture, setProfilePicture] = useState(null);
   const [startTime, setStartingTime] = useState(0);
   const [endTime, setEndingTime] = useState(0);
+  const [parkingPaymentData, setParkingPaymentData] = useState(null);
 
 
   useEffect(() => {
@@ -30,7 +31,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       parkingRef.off();
     };
   }, []);
-  
 
   useEffect(() => {
     firebase.firestore().collection('users')
@@ -86,22 +86,46 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       const defaultVehicle = vehicles.find((v) => v.isDefault);
       const plateNo = defaultVehicle ? defaultVehicle.plateNo : '';
       setVehicle(defaultVehicle);
+
+      const paymentSettingsRef = firebase.database().ref('parking_payment_settings');
+      let initialHours;
+      let initialPayment;
+      let incrementalPayment;
+
+      paymentSettingsRef.once('value', (snapshot) => {
+        const parkingPaymentData = snapshot.val();
+        initialHours = parseInt(parkingPaymentData.initial_hours);
+        initialPayment = parseInt(parkingPaymentData.initial_payment);
+        incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
+
+        // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+        console.log(initialHours, initialPayment, incrementalPayment);
+      });
   
       const parkingRef = firebase.database().ref(`users/${userId}`);
       const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
       const parkingTimeData = parkingTimeSnapshot.val();
   
-      const durationInHours = Math.ceil(parkingTimeData.duration / (60 * 60 * 1000));
-      const additionalHours = durationInHours - 3;
+      const durationInHours = Math.ceil(duration / (60 * 60 * 1000));
+      const additionalHours = durationInHours - parseInt(initialHours);
 
       console.log(duration)
   
-      let paymentAmount = 40;
+      let paymentAmount = 0 + parseInt(initialPayment);
   
       if (additionalHours > 0) {
-        paymentAmount += additionalHours * 20;
+        paymentAmount += additionalHours * parseInt(incrementalPayment);
       }
 
+      const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
+      const discountSnapshot = await discountRef.once('value');
+      const discountData = discountSnapshot.val();
+
+      if (discountData !== 'none') {
+        const discount = 0.2; // 20% discount
+        paymentAmount -= paymentAmount * discount;
+      }
+      
       await userRef.update({
         paymentStatus: true,
       });  
@@ -213,23 +237,47 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       const plateNo = defaultVehicle ? defaultVehicle.plateNo : '';
       setVehicle(defaultVehicle);
 
+      const paymentSettingsRef = firebase.database().ref('parking_payment_settings');
+      let initialHours;
+      let initialPayment;
+      let incrementalPayment;
+
+      paymentSettingsRef.once('value', (snapshot) => {
+        const parkingPaymentData = snapshot.val();
+        initialHours = parseInt(parkingPaymentData.initial_hours);
+        initialPayment = parseInt(parkingPaymentData.initial_payment);
+        incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
+
+        // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+        console.log(initialHours, initialPayment, incrementalPayment);
+      });
+
       const parkingRef = firebase.database().ref(`users/${userId}`);
       const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
       const parkingTimeData = parkingTimeSnapshot.val();
   
-      const durationInHours = Math.ceil(parkingTimeData.duration / (60 * 60 * 1000));
-      const additionalHours = durationInHours - 3;
+      const durationInHours = Math.ceil(duration / (60 * 60 * 1000));
+      const additionalHours = durationInHours - parseInt(initialHours);
 
+      duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
+      
       console.log(duration)
 
-      duration = (new Date().getTime() - start_time)/1000;
-  
-      let paymentAmount = 40;
+      let paymentAmount = 0 + parseInt(initialPayment);
   
       if (additionalHours > 0) {
-        paymentAmount += additionalHours * 20;
+        paymentAmount += additionalHours * parseInt(incrementalPayment);
       }
-  
+
+      const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
+      const discountSnapshot = await discountRef.once('value');
+      const discountData = discountSnapshot.val();
+
+      if (discountData !== 'none') {
+        const discount = 0.2; // 20% discount
+        paymentAmount -= paymentAmount * discount;
+      }
+      
       setPayment(paymentAmount);
 
       if (e_wallet < paymentAmount) {
