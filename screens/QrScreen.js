@@ -72,14 +72,12 @@ export default function ScanAndAddTransaction() {
         >
           <Text style={styles.buttonText}>Top-up Customer</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={[styles.button, { borderColor: '#213A5C', borderWidth: 1.5 }]}
           onPress={() => {setQrVisible(true), setShowParking(true)}}
         >
           <Text style={styles.buttonText}>Park Customer</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={[styles.button, { borderColor: '#213A5C', borderWidth: 1.5 }]}
           onPress={() => {setQrVisible(true), setShowParkingPay(true)}}
@@ -107,7 +105,7 @@ export default function ScanAndAddTransaction() {
           <View style={[styles.barcodebox]}>
             <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-              style={{ height: '180%', width: '100%' }}
+              style={{ height: '200%', width: '200%' }}
             />
           </View>
           <View style={{ flex: 1 }}></View>
