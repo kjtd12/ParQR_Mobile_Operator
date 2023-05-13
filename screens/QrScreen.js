@@ -117,8 +117,8 @@ export default function ScanAndAddTransaction() {
       {scanned && (
         <View>
           <Modal visible={showTopUp} animationType={'slide'} transparent={true}>
-              <View style={styles.operationModal} onPress={() => {setScanned(false), setShowTopUp(false)}}>
-                <View style={styles.card}>
+              <View style={styles.operationModal}>
+                <View style={[styles.card, {height: "auto", paddingVertical: 20}]}>
                   <AddTransaction userId={userId} />
                 </View>
                 <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
@@ -127,24 +127,24 @@ export default function ScanAndAddTransaction() {
               </View>
           </Modal>
           <Modal visible={showParking} animationType={'slide'} transparent={true}>
-            <TouchableOpacity style={styles.operationModal} onPress={() => {setScanned(false), setShowParking(false)}}>
+            <View style={styles.operationModal}>
               <View style={styles.card}>
                 <AddParkingTime userId={userId} />
               </View>
               <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowParking(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
                   <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Proceed</Text>
               </TouchableOpacity>
-            </TouchableOpacity>
+            </View>
           </Modal>
           <Modal visible={showParkingPay} animationType={'slide'} transparent={true}>
-            <TouchableOpacity style={styles.operationModal} onPress={() => {setScanned(false),  setShowParkingPay(false)}}>
+            <View style={styles.operationModal}>
               <View style={styles.card}>
                 <AddParkingPayment userId={userId} operatorName={operatorName} operatorUid={operatorUid}/>
               </View>
               <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowParkingPay(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
                   <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Proceed</Text>
               </TouchableOpacity>
-            </TouchableOpacity>
+            </View>
           </Modal>
         </View>
       )}

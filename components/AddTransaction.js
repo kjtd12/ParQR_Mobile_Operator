@@ -59,6 +59,7 @@ export default function AddTransaction({ userId }){
       style={{ 
         alignItems: 'center',
         justifyContent: 'center', 
+        
         }}
       >
       <View style={{ alignItems: 'center' }}>
