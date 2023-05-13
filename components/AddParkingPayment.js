@@ -385,7 +385,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
   useEffect(() => {
     const parkingRef = firebase.database().ref(`users/${userId}/parking_time_history`);
-    const query = parkingRef.orderByChild('end_time').limitToLast(1);
+    const query = parkingRef.orderByChild('start_time').limitToLast(1);
 
     const handleChildAdded = (snapshot) => {
       const parkingTimeData = snapshot.val();

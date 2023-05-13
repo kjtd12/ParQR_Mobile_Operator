@@ -107,7 +107,7 @@ export default function ScanAndAddTransaction() {
           <View style={[styles.barcodebox]}>
             <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-              style={{ height: '200%', width: '200%' }}
+              style={{ height: '180%', width: '100%' }}
             />
           </View>
           <View style={{ flex: 1 }}></View>
@@ -118,7 +118,7 @@ export default function ScanAndAddTransaction() {
         <View>
           <Modal visible={showTopUp} animationType={'slide'} transparent={true}>
               <TouchableOpacity style={styles.operationModal} onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}}>
-                <View style={[styles.card, {height: "auto", paddingVertical: 20}]}>
+                <View style={styles.card}>
                   <AddTransaction userId={userId} />
                 </View>
                 <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
