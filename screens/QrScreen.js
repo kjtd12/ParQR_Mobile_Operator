@@ -117,14 +117,14 @@ export default function ScanAndAddTransaction() {
       {scanned && (
         <View>
           <Modal visible={showTopUp} animationType={'slide'} transparent={true}>
-              <View style={styles.operationModal}>
+              <TouchableOpacity style={styles.operationModal} onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}}>
                 <View style={[styles.card, {height: "auto", paddingVertical: 20}]}>
                   <AddTransaction userId={userId} />
                 </View>
                 <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
                     <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Proceed</Text>
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
           </Modal>
           <Modal visible={showParking} animationType={'slide'} transparent={true}>
             <View style={styles.operationModal}>
