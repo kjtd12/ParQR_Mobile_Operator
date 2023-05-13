@@ -24,6 +24,10 @@ export default function AddTransaction({ userId }){
   }, []);
 
   const handleAddTransaction = async  () => {
+    console.log(amount);
+    if (amount == "") {
+      return;
+    }
     const userRef = firebase.firestore().collection('users').doc(userId);
     const userDoc = await userRef.get();
     const currentEwallet = userDoc.data().e_wallet;
@@ -32,10 +36,6 @@ export default function AddTransaction({ userId }){
     const date = now.toLocaleDateString('en-US');
     const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     const datetime = [date, time];
-    
-    if (amount == null) {
-      return;
-    }
 
     firebase.firestore().collection('users')
       .doc(userId)
