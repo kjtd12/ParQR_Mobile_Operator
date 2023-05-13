@@ -33,7 +33,9 @@ export default function AddTransaction({ userId }){
     const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     const datetime = [date, time];
     
-  
+    if (amount == null) {
+      return;
+    }
 
     firebase.firestore().collection('users')
       .doc(userId)
@@ -58,8 +60,7 @@ export default function AddTransaction({ userId }){
     <View 
       style={{ 
         alignItems: 'center',
-        justifyContent: 'center', 
-        
+        justifyContent: 'center',
         }}
       >
       <View style={{ alignItems: 'center' }}>

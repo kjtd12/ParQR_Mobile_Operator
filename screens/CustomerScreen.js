@@ -41,7 +41,6 @@ const CustomerScreen = () => {
   
   const renderItem = ({ item }) => {
     const dataItem = activeData[item];
-    console.log("data item: " + dataItem);
     return (
       <TouchableOpacity style={styles.card}>
         <View style={styles.customerItemTitle}>

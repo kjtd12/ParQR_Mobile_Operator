@@ -45,6 +45,7 @@ export default function ScanAndAddTransaction() {
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     setUserId(data);
+    console.log(data);
     const docRef = db.collection('users').doc(data);
     const docSnapshot = await docRef.get();
     if (!docSnapshot.exists) {
@@ -116,7 +117,7 @@ export default function ScanAndAddTransaction() {
         <View>
           <Modal visible={showTopUp} animationType={'slide'} transparent={true}>
               <TouchableOpacity style={styles.operationModal} onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}}>
-                <View style={styles.card}>
+                <View style={[styles.card, {paddingVertical: 20}]}>
                   <AddTransaction userId={userId} />
                 </View>
                 <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
@@ -140,7 +141,7 @@ export default function ScanAndAddTransaction() {
                 <AddParkingPayment userId={userId} operatorName={operatorName} operatorUid={operatorUid}/>
               </View>
               <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowParkingPay(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
-                  <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Proceed</Text>
+                <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Proceed</Text>
               </TouchableOpacity>
             </View>
           </Modal>
