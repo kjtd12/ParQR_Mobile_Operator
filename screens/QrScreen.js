@@ -44,6 +44,7 @@ export default function ScanAndAddTransaction() {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
+    setQrVisible(false);
     setUserId(data);
     console.log(data);
     const docRef = db.collection('users').doc(data);
