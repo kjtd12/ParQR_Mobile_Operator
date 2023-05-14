@@ -49,8 +49,7 @@ const ProfileScreen = () => {
   ];
 
   const moreItems = [
-    { id: '1', label: 'Help & Support', onPress: () => navigation.navigate('Profiles',{screen: 'Help & Support'}), imagePath: require('../assets/profileIcons/Help.png') },
-    { id: '2', label: 'About App', onPress: () => navigation.navigate('Profiles',{screen: 'About App'}), imagePath: require('../assets/profileIcons/AboutApp.png') },
+    { id: '1', label: 'About App', onPress: () => navigation.navigate('Profiles',{screen: 'About App'}), imagePath: require('../assets/profileIcons/AboutApp.png') },
   ];
 
   const renderMenuItem = ({ item }) => {

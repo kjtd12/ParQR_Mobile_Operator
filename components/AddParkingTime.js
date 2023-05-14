@@ -22,24 +22,25 @@ export default function AddParkingTime({ userId }){
     .doc(userId).get()
     .then((snapshot) => {
       if(snapshot.exists){
+        const data = snapshot.data().vehicles;
         setProfilePicture(snapshot.get('profile_picture'));
         setContactNumber(snapshot.data().number);
         setUserName(snapshot.data().name);
-        const car = snapshot.data().vehicles.find((v) => v.isDefault)
-        setCarPlate(car ? car.plateNo : '');
+        if (data != undefined) {
+          const car = data.find((v) => v.isDefault) 
+          if (!car) {
+            alert("User does not have a default car or haven't created a vehicle.");
+          } else {
+            setCarPlate(car ? car.plateNo : '');
+          }
+        } else {
+          alert("User does not have a default car or haven't created a vehicle.");
+        }
       } else {
         console.log('user does not exist')
       }
     })
   })
-
-  const handleDiscount = () => {
-    if (discount){
-      setDiscount(false);
-      return;
-    }
-    setDiscount(true);
-  }
 
   const handleAddParkingTime = () => {
     const userRef = firebase.database().ref('users/' + userId);
@@ -57,6 +58,10 @@ export default function AddParkingTime({ userId }){
         console.log('Occupied spaces incremented successfully.');
       }
     });
+
+    if (carPlate == null || carPlate == undefined) {
+      return;
+    }
 
     const customerRef = firebase.database().ref('activeCustomer/' + userId);
     customerRef.update({ 
