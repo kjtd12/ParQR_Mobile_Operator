@@ -96,10 +96,10 @@ const TransactionsScreen = () => {
   
     switch (sortCurrentValue) {
       case 'ascending':
-        filteredTransactions.sort((a, b) => a.user_name - b.user_name);
+        filteredTransactions.sort((a, b) => a.user_name.localeCompare(b.user_name));
         break;
       case 'descending':
-        filteredTransactions.sort((a, b) => b.user_name - a.user_name);
+        filteredTransactions.sort((a, b) => b.user_name.localeCompare(a.user_name));
         break;
       case 'newest':
         filteredTransactions.sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
@@ -156,34 +156,41 @@ const TransactionsScreen = () => {
   
   const renderTransactionItem = ({ item }) => {
     const formattedPayment = item.payment ? `₱${parseFloat(item.payment).toFixed(2)}` : 'N/A';
-
+  
     const formattedDate = item.date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
     const formattedTime = item.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-
+  
+    const handlePress = () => {
+      setDetailData(item);
+      setDetailModalVisible(true);
+    };
+  
     return (
-      <TouchableOpacity onPress={() => {
-        setDetailData(item)
-        setDetailModalVisible(true);
-      }}
-      style={styles.transactionItem}>
-        <View style={styles.transactionItemHeader}>
-          <Text style={styles.transactionItemTitle}>{item.user_name}</Text>
-          <Text style={styles.transactionItemSubtitle}>{item.plate_no}</Text>
-        </View>
-        <View style={styles.transactionItemDetails}>
-          <Text style={styles.transactionItemDate}>{formattedDate}</Text>
-          <Text style={styles.transactionItemTime}>{formattedTime}</Text>
-          <Text style={styles.transactionItemAmount}>{formattedPayment}</Text>
-        </View>
-        <DetailsModal isVisible={detailModalVisible} onClose={() => {
-            setDetailModalVisible(false)
-            setDetailData([])
-            }} item={detailData}
-            operator={operatorName}
-            />
-      </TouchableOpacity>
+      <>
+        <TouchableOpacity onPress={handlePress} style={styles.transactionItem}>
+          <View style={styles.transactionItemHeader}>
+            <Text style={styles.transactionItemTitle}>{item.user_name}</Text>
+            <Text style={styles.transactionItemSubtitle}>{item.plate_no}</Text>
+          </View>
+          <View style={styles.transactionItemDetails}>
+            <Text style={styles.transactionItemDate}>{formattedDate}</Text>
+            <Text style={styles.transactionItemTime}>{formattedTime}</Text>
+            <Text style={styles.transactionItemAmount}>{formattedPayment}</Text>
+          </View>
+        </TouchableOpacity>
+        <DetailsModal
+          isVisible={detailModalVisible}
+          onClose={() => {
+            setDetailModalVisible(false);
+            setDetailData([]);
+          }}
+          item={detailData}
+          operator={operatorName}
+        />
+      </>
     );
   };
+  
 
   return (
     <View style={styles.container}>

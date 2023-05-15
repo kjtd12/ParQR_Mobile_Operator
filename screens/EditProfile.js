@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, KeyboardAvoidingView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../config'
 import React, { useState, useEffect } from 'react'
@@ -30,21 +30,42 @@ const EditProfile = () => {
   }, []);
 
   const handleUpdateProfile = async () => {
-    firebase.firestore().collection('operators')
-    .doc(firebase.auth().currentUser.uid)
-    .update({
-      name: name,
-      address: address,
-      number: contactNumber,
-      email: email
-    })
-    .then(() => {
-      alert('Updated successfully');
-    })
-    .catch((error) => {
-      alert('Error updating: ', error);
-    });
-
+    // Check if the new email is different from the current one
+    if (email !== firebase.auth().currentUser.email) {
+      try {
+        // Update the email in Firebase Authentication
+        await firebase.auth().currentUser.updateEmail(email);
+      } catch (error) {
+        // Error occurred while updating the email in Firebase Authentication
+        alert('Error updating email: ', error.message);
+        return;
+      }
+    }
+  
+    // Update the profile in Firestore
+    const operatorRef = firebase.firestore().collection('operators');
+    const operatorSnapshot = await operatorRef.where('email', '==', email).get();
+  
+    if (!operatorSnapshot.empty) {
+      // Email already exists in a different operator
+      alert('Email already exists and is already in use on another account.');
+      return;
+    }
+  
+    operatorRef
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        name: name,
+        address: address,
+        number: contactNumber,
+        email: email
+      })
+      .then(() => {
+        alert('Updated successfully');
+      })
+      .catch((error) => {
+        alert('Error updating: ', error);
+      });
   };
 
   const handleUploadPhoto = async () => {
@@ -90,7 +111,10 @@ const EditProfile = () => {
   const profileImage = profilePicture ? { uri: profilePicture } : { uri: 'https://via.placeholder.com/150x150.png?text=Profile+Image' };
 
   return (
-    <View>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior="padding"
+    >
       <View style={styles.cardTop}>
         <View style={{ marginBottom: 20 }}>
           <View style={{ flexDirection: 'row',  alignItems: 'center', justifyContent: 'space-between' }}>
@@ -152,18 +176,21 @@ const EditProfile = () => {
           />
         </View>
       </View>
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ alignItems: 'center'}}>
         <TouchableOpacity onPress={handleUpdateProfile} style={{ backgroundColor: "#213A5C", paddingVertical: 20, paddingHorizontal: 90, borderRadius: 10, marginTop: 10 }}>
           <Text style={{ color: 'white' }}>Update Profile</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
 export default EditProfile
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+  },
   editContainer: {
     marginVertical: 20,
     paddingHorizontal: 7,

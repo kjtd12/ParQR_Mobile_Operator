@@ -4,8 +4,8 @@ import { firebase } from '../config';
 
 export default function AddParkingPayment({ userId, operatorName, operatorUid }) {
   let  [payment, setPayment] = useState(40);
-  const [start_time, setStartTime] = useState(0);
   let [duration, setDuration] = useState(0);
+  const [start_time, setStartTime] = useState(0);
   const [error, setError] = useState(null);
   const [vehicle, setVehicle] = useState(null);
   const [configVisible, setConfigVisible] = useState(false);
@@ -15,7 +15,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   const [profilePicture, setProfilePicture] = useState(null);
   const [startTime, setStartingTime] = useState(0);
   const [endTime, setEndingTime] = useState(0);
-  const [parkingPaymentData, setParkingPaymentData] = useState(null);
+  const [userNotParked, setUserNotParked] = useState(false);
 
 
   useEffect(() => {
@@ -55,7 +55,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   };
 
   const handlePayNow = () => {
-    console.log("cash: " + byCash)
     setByCash(true)
     handleFailedPayment();
     setDetailVisible(true);
@@ -72,6 +71,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         setError('User does not exist');
         return;
       }
+
+      const customerRef = firebase.database().ref('activeCustomer/' + userId);
+      const customerSnapshot = await customerRef.once('value');
+      const exists = customerSnapshot.exists();
+
+      if (!exists) {
+        setUserNotParked(true);
+        return;
+      } 
   
       const userData = userSnapshot.data();
       const { name, vehicles, number } = userData;
@@ -92,26 +100,23 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       let initialPayment;
       let incrementalPayment;
 
-      paymentSettingsRef.once('value', (snapshot) => {
+      await paymentSettingsRef.once('value', (snapshot) => {
         const parkingPaymentData = snapshot.val();
         initialHours = parseInt(parkingPaymentData.initial_hours);
         initialPayment = parseInt(parkingPaymentData.initial_payment);
         incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
 
         // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
-        console.log(initialHours, initialPayment, incrementalPayment);
       });
   
       const parkingRef = firebase.database().ref(`users/${userId}`);
       const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
       const parkingTimeData = parkingTimeSnapshot.val();
   
-      const durationInHours = Math.ceil(duration / (60 * 60 * 1000));
+      const durationInHours = Math.ceil(duration / (60 * 60));
       const additionalHours = durationInHours - parseInt(initialHours);
-
-      console.log(duration)
   
-      let paymentAmount = 0 + parseInt(initialPayment);
+      let paymentAmount = parseInt(initialPayment);
   
       if (additionalHours > 0) {
         paymentAmount += additionalHours * parseInt(incrementalPayment);
@@ -184,13 +189,10 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         }
       });
   
-      const customerRef = firebase.database().ref('activeCustomer/' + userId);
       customerRef.remove();
 
       const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
       const today = new Date().toISOString().slice(0, 10);
-
-      console.log(today);
 
       transactionsCountAndRevenue.child(today).transaction((data) => {
         if (data === null) {
@@ -222,6 +224,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         setError('User does not exist');
         return;
       }
+
+      const customerRef = firebase.database().ref('activeCustomer/' + userId);
+      const customerSnapshot = await customerRef.once('value');
+      const exists = customerSnapshot.exists();
+
+      if (!exists) {
+        setUserNotParked(true);
+        return;
+      } 
   
       const userData = userSnapshot.data();
       const { e_wallet, name, vehicles, number } = userData;
@@ -242,28 +253,26 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       let initialPayment;
       let incrementalPayment;
 
-      paymentSettingsRef.once('value', (snapshot) => {
+      await paymentSettingsRef.once('value', (snapshot) => {
         const parkingPaymentData = snapshot.val();
         initialHours = parseInt(parkingPaymentData.initial_hours);
         initialPayment = parseInt(parkingPaymentData.initial_payment);
         incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
 
         // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
-        console.log(initialHours, initialPayment, incrementalPayment);
       });
 
       const parkingRef = firebase.database().ref(`users/${userId}`);
       const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
       const parkingTimeData = parkingTimeSnapshot.val();
   
-      const durationInHours = Math.ceil(duration / (60 * 60 * 1000));
+      const durationInHours = Math.ceil(duration / (60 * 60));
       const additionalHours = durationInHours - parseInt(initialHours);
 
       duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
       
-      console.log(duration)
 
-      let paymentAmount = 0 + parseInt(initialPayment);
+      let paymentAmount = parseInt(initialPayment);
   
       if (additionalHours > 0) {
         paymentAmount += additionalHours * parseInt(incrementalPayment);
@@ -355,7 +364,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         }
       });
 
-      const customerRef = firebase.database().ref('activeCustomer/' + userId);
       customerRef.remove();
 
       const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
@@ -374,8 +382,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           };
         }
       });
-
-
       
     } catch (error) {
       console.error(error);
@@ -474,6 +480,18 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               <Text style={{ color: 'lightgray' }}>Payment Status: </Text>
               <Text style={{ color: '#213A5C' }}>{byCash ? 'Paid by Cash' : 'Paid'}</Text>
             </View>
+          </View>
+        </View>
+      )}
+      {userNotParked && (
+        <View>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ paddingBottom: 10, color: '#213A5C', fontSize: 32 }}>User Not parked yet.</Text>
+            <Text style={{ paddingBottom: 10, color: '#213A5C' }}>Press the Proceed bellow to scan again.</Text>
+            <View style={{ alignItems: 'center' }}>
+            </View>
+          </View>
+          <View>
           </View>
         </View>
       )}

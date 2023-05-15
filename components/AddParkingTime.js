@@ -28,9 +28,7 @@ export default function AddParkingTime({ userId }){
         setUserName(snapshot.data().name);
         if (data != undefined) {
           const car = data.find((v) => v.isDefault) 
-          if (!car) {
-            alert("User does not have a default car or haven't created a vehicle.");
-          } else {
+          if (car) {
             setCarPlate(car ? car.plateNo : '');
           }
         } else {
@@ -42,37 +40,51 @@ export default function AddParkingTime({ userId }){
     })
   })
 
-  const handleAddParkingTime = () => {
-    const userRef = firebase.database().ref('users/' + userId);
-    setConfigVisibile(false)
-    setDetailVisible(true)
-    // Update current parking time
-    userRef.update({ parking_time: { start_time: startTime.getTime() } });
-
-    const parkingRef = firebase.database().ref('parking_availability');
-
-    parkingRef.update({ occupied_spaces: firebase.database.ServerValue.increment(+1) }, (error) => {
-      if (error) {
-        alert('Error decrementing occupied_spaces:', error.message);
+  const handleAddParkingTime = async () => {
+    try {
+      const userRef = firebase.database().ref('users/' + userId);
+      const parkingTimeRef = userRef.child('parking_time');
+  
+      const snapshot = await parkingTimeRef.once('value');
+      const startTime = snapshot.val()?.start_time;
+      console.log("Start Time: " + startTime);
+  
+      if (startTime !== 0 && startTime !== undefined) {
+        alert("The customer has already parked.");
+        return;
       } else {
-        console.log('Occupied spaces incremented successfully.');
+        userRef.update({ parking_time: { start_time: Date.now() } });
+  
+        const parkingRef = firebase.database().ref('parking_availability');
+        await parkingRef.child('occupied_spaces').transaction((currentValue) => {
+          return (currentValue || 0) + 1;
+        });
+  
+        if (!carPlate) {
+          return;
+        }
+  
+        const customerRef = firebase.database().ref('activeCustomer/' + userId);
+        await customerRef.update({ 
+          name: userName,  
+          check_in_time: Date.now(), 
+          contact_number: contactNumber, 
+          discount: discount,
+          plate: carPlate
+        });
       }
-    });
-
-    if (carPlate == null || carPlate == undefined) {
-      return;
+  
+      setConfigVisibile(false);
+      setDetailVisible(true);
+    } catch (error) {
+      // Handle any potential errors here
+      console.error('Error:', error);
+      // Display an error message or handle the error in an appropriate way
+      alert('An error occurred: ' + error.message);
     }
-
-    const customerRef = firebase.database().ref('activeCustomer/' + userId);
-    customerRef.update({ 
-                        name: userName,  
-                        check_in_time: startTime.getTime(), 
-                        contact_number: contactNumber , 
-                        discount: discount,
-                        plate: carPlate
-                       })
-
   };
+  
+  
 
   const profileImage = profilePicture ? { uri: profilePicture } : { uri: 'https://via.placeholder.com/150x150.png?text=Profile+Image' };
   const spacer = (n) => [...Array(n)].map(() => ' ').join('');

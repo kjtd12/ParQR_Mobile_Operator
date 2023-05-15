@@ -1,25 +1,32 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 const DetailsModal = ({ isVisible, onClose, item, operator }) => {
 
     const { start_time, duration, operator_name, payment } = item;
-    const date = new Date(start_time).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    const startTime = new Date(start_time).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    const endTime = new Date(start_time + duration * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    const formattedPrice = parseInt(payment) ? `${parseInt(payment).toFixed(2)}` : 'N/A';
-    const start = new Date(start_time);
-    const end = new Date(start_time + duration * 1000);
-    const durationInSeconds = (end - start) / 1000;
-    const durationInMinutes = durationInSeconds / 60;
-    const durationInHours = durationInMinutes / 60;
+    const startTimeDate = useMemo(() => new Date(start_time), [start_time]);
+    const endTimeDate = useMemo(() => new Date(start_time + duration * 1000), [start_time, duration]);
+
+    const date = useMemo(
+        () => startTimeDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        [startTimeDate]
+    );
+    const startTime = useMemo(() => startTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }), [startTimeDate]);
+    const endTime = useMemo(() => endTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }), [endTimeDate]);
+
+    const parsedPayment = useMemo(() => parseInt(payment), [payment]);
+    const formattedPrice = useMemo(() => (parsedPayment ? parsedPayment.toFixed(2) : 'N/A'), [parsedPayment]);
+
+    const durationInSeconds = useMemo(() => (endTimeDate - startTimeDate) / 1000, [endTimeDate, startTimeDate]);
+    const durationInMinutes = useMemo(() => durationInSeconds / 60, [durationInSeconds]);
+    const durationInHours = useMemo(() => durationInMinutes / 60, [durationInMinutes]);
 
     let durationText;
     if (durationInHours < 1) {
         const remainingSeconds = Math.round(durationInSeconds % 60);
         durationText = `0 mins ${remainingSeconds} secs`;
     } else {
-        durationText = `${durationInHours} hours ${durationInMinutes % 60} min`
+        durationText = `${durationInHours} hours ${durationInMinutes % 60} min`;
     }
 
   return (
