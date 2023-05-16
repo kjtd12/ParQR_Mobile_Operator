@@ -113,7 +113,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
       const parkingTimeData = parkingTimeSnapshot.val();
   
-      const durationInHours = Math.ceil(duration / (60 * 60));
+      const durationInHours = Math.floor(duration / (60 * 60));
       const additionalHours = durationInHours - parseInt(initialHours);
   
       let paymentAmount = parseInt(initialPayment);
@@ -161,6 +161,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         payment: paymentAmount,
         reference_number: referenceNumber,
         date: date,
+        top_up: false
       });
   
       const generalTransactionsRef = firebase.database().ref(`transactions`);
@@ -174,6 +175,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         payment: paymentAmount,
         reference_number: referenceNumber,
         date: date,
+        top_up: false
       });
   
       parkingRef.child('parking_time').update({
@@ -208,6 +210,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         }
       });
 
+      setPayment(paymentAmount);
     } catch (error) {
       console.error(error);
       setError('An error occurred while adding payment');
@@ -266,7 +269,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
       const parkingTimeData = parkingTimeSnapshot.val();
   
-      const durationInHours = Math.ceil(duration / (60 * 60));
+      const durationInHours = Math.floor(duration / (60 * 60));
       const additionalHours = durationInHours - parseInt(initialHours);
 
       duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
@@ -336,6 +339,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         payment: paymentAmount,
         reference_number: referenceNumber,
         date: date,
+        top_up: false
       });
 
       const generalTransactionsRef = firebase.database().ref(`transactions`);
@@ -349,6 +353,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         payment: paymentAmount,
         reference_number: referenceNumber,
         date: date,
+        top_up: false
       });
 
       parkingRef.child('parking_time').update({
@@ -383,6 +388,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         }
       });
       
+      setPayment(paymentAmount);
     } catch (error) {
       console.error(error);
       setError('An error occurred while adding payment');

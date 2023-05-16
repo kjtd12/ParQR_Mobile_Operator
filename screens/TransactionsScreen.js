@@ -156,9 +156,17 @@ const TransactionsScreen = () => {
   
   const renderTransactionItem = ({ item }) => {
     const formattedPayment = item.payment ? `₱${parseFloat(item.payment).toFixed(2)}` : 'N/A';
+    let formattedDate;
+    let formattedTime;
+
   
-    const formattedDate = item.date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-    const formattedTime = item.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    if (item.top_up) {
+      formattedDate = item.formattedDate;
+      formattedTime = item.formattedTime;
+    } else {
+      formattedDate = item.date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+      formattedTime = item.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
   
     const handlePress = () => {
       setDetailData(item);
@@ -190,7 +198,6 @@ const TransactionsScreen = () => {
       </>
     );
   };
-  
 
   return (
     <View style={styles.container}>
