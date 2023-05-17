@@ -62,16 +62,16 @@ export default function AddParkingTime({ userId }){
   
         if (!carPlate) {
           return;
+        } else {
+          const customerRef = firebase.database().ref('activeCustomer/' + userId);
+          await customerRef.update({ 
+            name: userName,  
+            check_in_time: Date.now(), 
+            contact_number: contactNumber, 
+            discount: discount,
+            plate: carPlate
+          });
         }
-  
-        const customerRef = firebase.database().ref('activeCustomer/' + userId);
-        await customerRef.update({ 
-          name: userName,  
-          check_in_time: Date.now(), 
-          contact_number: contactNumber, 
-          discount: discount,
-          plate: carPlate
-        });
       }
   
       setConfigVisibile(false);
@@ -83,8 +83,6 @@ export default function AddParkingTime({ userId }){
       alert('An error occurred: ' + error.message);
     }
   };
-  
-  
 
   const profileImage = profilePicture ? { uri: profilePicture } : { uri: 'https://via.placeholder.com/150x150.png?text=Profile+Image' };
   const spacer = (n) => [...Array(n)].map(() => ' ').join('');

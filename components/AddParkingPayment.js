@@ -63,15 +63,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   
   const handleFailedPayment = async () => {
     try {
-      const db = firebase.firestore();
-      const userRef = db.collection('users').doc(userId);
-      const userSnapshot = await userRef.get();
-  
-      if (!userSnapshot.exists) {
-        setError('User does not exist');
-        return;
-      }
-
       const customerRef = firebase.database().ref('activeCustomer/' + userId);
       const customerSnapshot = await customerRef.once('value');
       const exists = customerSnapshot.exists();
@@ -79,138 +70,146 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       if (!exists) {
         setUserNotParked(true);
         return;
-      } 
-  
-      const userData = userSnapshot.data();
-      const { name, vehicles, number } = userData;
-  
-      setUserName(name);
-  
-      if (name == null) {
-        setError('User name is null');
-        return;
-      }
-  
-      const defaultVehicle = vehicles.find((v) => v.isDefault);
-      const plateNo = defaultVehicle ? defaultVehicle.plateNo : '';
-      setVehicle(defaultVehicle);
-
-      const paymentSettingsRef = firebase.database().ref('parking_payment_settings');
-      let initialHours;
-      let initialPayment;
-      let incrementalPayment;
-
-      await paymentSettingsRef.once('value', (snapshot) => {
-        const parkingPaymentData = snapshot.val();
-        initialHours = parseInt(parkingPaymentData.initial_hours);
-        initialPayment = parseInt(parkingPaymentData.initial_payment);
-        incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
-
-        // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
-      });
-  
-      const parkingRef = firebase.database().ref(`users/${userId}`);
-      const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
-      const parkingTimeData = parkingTimeSnapshot.val();
-  
-      const durationInHours = Math.floor(duration / (60 * 60));
-      const additionalHours = durationInHours - parseInt(initialHours);
-  
-      let paymentAmount = parseInt(initialPayment);
-  
-      if (additionalHours > 0) {
-        paymentAmount += additionalHours * parseInt(incrementalPayment);
-      }
-
-      const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
-      const discountSnapshot = await discountRef.once('value');
-      const discountData = discountSnapshot.val();
-
-      if (discountData !== 'none') {
-        const discount = 0.2; // 20% discount
-        paymentAmount -= paymentAmount * discount;
-      }
+      } else {
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(userId);
+        const userSnapshot = await userRef.get();
+    
+        if (!userSnapshot.exists) {
+          setError('User does not exist');
+          return;
+        } else {
+          const userData = userSnapshot.data();
+          const { name, vehicles, number } = userData;
       
-      await userRef.update({
-        paymentStatus: true,
-      });  
-  
-      setPayment(paymentAmount);
-  
-      const referenceNumber = '800' + generateReferenceNumber();
-  
-      await parkingRef.child('parking_time_history').push({
-        operator_name: operatorName,
-        user_name: name,
-        plate_no: plateNo,
-        start_time: parkingTimeData.start_time,
-        duration: duration,
-        payment: paymentAmount,
-        reference_number: referenceNumber,
-      });
-  
-      const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
-      const date = new Date().toISOString();
-  
-      await operatorTransactionsRef.push({
-        number: number,
-        user_name: name,
-        plate_no: plateNo,
-        start_time: parkingTimeData.start_time,
-        duration: duration,
-        payment: paymentAmount,
-        reference_number: referenceNumber,
-        date: date,
-        top_up: false
-      });
-  
-      const generalTransactionsRef = firebase.database().ref(`transactions`);
-  
-      await generalTransactionsRef.push({
-        number: number,
-        user_name: name,
-        plate_no: plateNo,
-        start_time: parkingTimeData.start_time,
-        duration: duration,
-        payment: paymentAmount,
-        reference_number: referenceNumber,
-        date: date,
-        top_up: false
-      });
-  
-      parkingRef.child('parking_time').update({
-        start_time: 0,
-      });
-  
-      const parkingAvailabilityRef = firebase.database().ref('parking_availability');
-      parkingAvailabilityRef.update({ occupied_spaces: firebase.database.ServerValue.increment(-1) }, (error) => {
-        if (error) {
-          alert('Error decrementing occupied_spaces:', error.message);
-        } else {
-          console.log('Occupied spaces decremented successfully.');
+          setUserName(name);
+      
+          if (name == null) {
+            setError('User name is null');
+            return;
+          }
+      
+          const defaultVehicle = vehicles.find((v) => v.isDefault);
+          const plateNo = defaultVehicle ? defaultVehicle.plateNo : '';
+          setVehicle(defaultVehicle);
+
+          const paymentSettingsRef = firebase.database().ref('parking_payment_settings');
+          let initialHours;
+          let initialPayment;
+          let incrementalPayment;
+
+          await paymentSettingsRef.once('value', (snapshot) => {
+            const parkingPaymentData = snapshot.val();
+            initialHours = parseInt(parkingPaymentData.initial_hours);
+            initialPayment = parseInt(parkingPaymentData.initial_payment);
+            incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
+
+            // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+          });
+      
+          const parkingRef = firebase.database().ref(`users/${userId}`);
+          const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
+          const parkingTimeData = parkingTimeSnapshot.val();
+      
+          const durationInHours = Math.floor(duration / (60 * 60));
+          const additionalHours = durationInHours - parseInt(initialHours);
+      
+          let paymentAmount = parseInt(initialPayment);
+      
+          if (additionalHours > 0) {
+            paymentAmount += additionalHours * parseInt(incrementalPayment);
+          }
+
+          const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
+          const discountSnapshot = await discountRef.once('value');
+          const discountData = discountSnapshot.val();
+
+          if (discountData !== 'none') {
+            const discount = 0.2; // 20% discount
+            paymentAmount -= paymentAmount * discount;
+          }
+          
+          await userRef.update({
+            paymentStatus: true,
+          });  
+      
+          setPayment(paymentAmount);
+      
+          const referenceNumber = '800' + generateReferenceNumber();
+      
+          await parkingRef.child('parking_time_history').push({
+            operator_name: operatorName,
+            user_name: name,
+            plate_no: plateNo,
+            start_time: parkingTimeData.start_time,
+            duration: duration,
+            payment: paymentAmount,
+            reference_number: referenceNumber,
+          });
+      
+          const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
+          const date = new Date().toISOString();
+      
+          await operatorTransactionsRef.push({
+            number: number,
+            user_name: name,
+            plate_no: plateNo,
+            start_time: parkingTimeData.start_time,
+            duration: duration,
+            payment: paymentAmount,
+            reference_number: referenceNumber,
+            date: date,
+            top_up: false
+          });
+      
+          const generalTransactionsRef = firebase.database().ref(`transactions`);
+      
+          await generalTransactionsRef.push({
+            number: number,
+            user_name: name,
+            plate_no: plateNo,
+            start_time: parkingTimeData.start_time,
+            duration: duration,
+            payment: paymentAmount,
+            reference_number: referenceNumber,
+            date: date,
+            top_up: false
+          });
+      
+          parkingRef.child('parking_time').update({
+            start_time: 0,
+          });
+      
+          const parkingAvailabilityRef = firebase.database().ref('parking_availability');
+          parkingAvailabilityRef.update({ occupied_spaces: firebase.database.ServerValue.increment(-1) }, (error) => {
+            if (error) {
+              alert('Error decrementing occupied_spaces:', error.message);
+            } else {
+              console.log('Occupied spaces decremented successfully.');
+            }
+          });
+      
+          customerRef.remove();
+
+          const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
+          const today = new Date().toISOString().slice(0, 10);
+
+          transactionsCountAndRevenue.child(today).transaction((data) => {
+            if (data === null) {
+              return {
+                count: 1,
+                revenue: paymentAmount
+              };
+            } else {
+              return {
+                count: data.count + 1,
+                revenue: data.revenue + paymentAmount
+              };
+            }
+          });
+          setPayment(paymentAmount);
         }
-      });
-  
-      customerRef.remove();
-
-      const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
-      const today = new Date().toISOString().slice(0, 10);
-
-      transactionsCountAndRevenue.child(today).transaction((data) => {
-        if (data === null) {
-          return {
-            count: 1,
-            revenue: paymentAmount
-          };
-        } else {
-          return {
-            count: data.count + 1,
-            revenue: data.revenue + paymentAmount
-          };
-        }
-      });
-
-      setPayment(paymentAmount);
+      }
     } catch (error) {
       console.error(error);
       setError('An error occurred while adding payment');
@@ -219,15 +218,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   
   const handleAddPayment = async () => {
     try {
-      const db = firebase.firestore();
-      const userRef = db.collection('users').doc(userId);
-      const userSnapshot = await userRef.get();
-  
-      if (!userSnapshot.exists) {
-        setError('User does not exist');
-        return;
-      }
-
       const customerRef = firebase.database().ref('activeCustomer/' + userId);
       const customerSnapshot = await customerRef.once('value');
       const exists = customerSnapshot.exists();
@@ -235,160 +225,169 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       if (!exists) {
         setUserNotParked(true);
         return;
-      } 
-  
-      const userData = userSnapshot.data();
-      const { e_wallet, name, vehicles, number } = userData;
-
-      setUserName(name);
-
-      if (name == null) {
-        setError('User name is null');
-        return;
-      }
-  
-      const defaultVehicle = vehicles.find((v) => v.isDefault);
-      const plateNo = defaultVehicle ? defaultVehicle.plateNo : '';
-      setVehicle(defaultVehicle);
-
-      const paymentSettingsRef = firebase.database().ref('parking_payment_settings');
-      let initialHours;
-      let initialPayment;
-      let incrementalPayment;
-
-      await paymentSettingsRef.once('value', (snapshot) => {
-        const parkingPaymentData = snapshot.val();
-        initialHours = parseInt(parkingPaymentData.initial_hours);
-        initialPayment = parseInt(parkingPaymentData.initial_payment);
-        incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
-
-        // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
-      });
-
-      const parkingRef = firebase.database().ref(`users/${userId}`);
-      const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
-      const parkingTimeData = parkingTimeSnapshot.val();
-  
-      const durationInHours = Math.floor(duration / (60 * 60));
-      const additionalHours = durationInHours - parseInt(initialHours);
-
-      duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
+      } else {
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(userId);
+        const userSnapshot = await userRef.get();
+    
+        if (!userSnapshot.exists) {
+          setError('User does not exist');
+          return;
+        } else {
+          const userData = userSnapshot.data();
+          const { e_wallet, name, vehicles, number } = userData;
+    
+          setUserName(name);
+    
+          if (name == null) {
+            setError('User name is null');
+            return;
+          }
       
-
-      let paymentAmount = parseInt(initialPayment);
-  
-      if (additionalHours > 0) {
-        paymentAmount += additionalHours * parseInt(incrementalPayment);
-      }
-
-      const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
-      const discountSnapshot = await discountRef.once('value');
-      const discountData = discountSnapshot.val();
-
-      if (discountData !== 'none') {
-        const discount = 0.2; // 20% discount
-        paymentAmount -= paymentAmount * discount;
-      }
+          const defaultVehicle = vehicles.find((v) => v.isDefault);
+          const plateNo = defaultVehicle ? defaultVehicle.plateNo : '';
+          setVehicle(defaultVehicle);
+    
+          const paymentSettingsRef = firebase.database().ref('parking_payment_settings');
+          let initialHours;
+          let initialPayment;
+          let incrementalPayment;
+    
+          await paymentSettingsRef.once('value', (snapshot) => {
+            const parkingPaymentData = snapshot.val();
+            initialHours = parseInt(parkingPaymentData.initial_hours);
+            initialPayment = parseInt(parkingPaymentData.initial_payment);
+            incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
+    
+            // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+          });
+    
+          const parkingRef = firebase.database().ref(`users/${userId}`);
+          const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
+          const parkingTimeData = parkingTimeSnapshot.val();
       
-      setPayment(paymentAmount);
-
-      if (e_wallet < paymentAmount) {
-        if (byCash == false) {
+          const durationInHours = Math.floor(duration / (60 * 60));
+          const additionalHours = durationInHours - parseInt(initialHours);
+    
+          duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
+          
+    
+          let paymentAmount = parseInt(initialPayment);
+      
+          if (additionalHours > 0) {
+            paymentAmount += additionalHours * parseInt(incrementalPayment);
+          }
+    
+          const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
+          const discountSnapshot = await discountRef.once('value');
+          const discountData = discountSnapshot.val();
+    
+          if (discountData !== 'none') {
+            const discount = 0.2; // 20% discount
+            paymentAmount -= paymentAmount * discount;
+          }
+          
+          setPayment(paymentAmount);
+    
+          if (e_wallet < paymentAmount) {
+            if (byCash == false) {
+              await userRef.update({
+                paymentStatus: false,
+                balance: paymentAmount
+              });  
+              setDetailVisible(false);
+              setConfigVisible(true);
+            }
+            setError('Insufficient funds');
+            return;
+          }
+    
+          setDetailVisible(true);
+    
           await userRef.update({
-            paymentStatus: false,
-            balance: paymentAmount
+            paymentStatus: true,
           });  
-          setDetailVisible(false);
-          setConfigVisible(true);
-        }
-        setError('Insufficient funds');
-        return;
-      }
-
-      setDetailVisible(true);
-
-      await userRef.update({
-        paymentStatus: true,
-      });  
-
-      await userRef.update({
-        e_wallet: e_wallet - paymentAmount,
-      });  
-
-      const referenceNumber = '800' + generateReferenceNumber();
-  
-      await parkingRef.child('parking_time_history').push({
-        operator_name: operatorName,
-        user_name: name,
-        plate_no: plateNo,
-        start_time: parkingTimeData.start_time,
-        duration: duration,
-        payment: paymentAmount,
-        reference_number: referenceNumber,
-      });
-  
-      const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
-      const date = new Date().toISOString();
-  
-      await operatorTransactionsRef.push({
-        number: number,
-        user_name: name,
-        plate_no: plateNo,
-        start_time: parkingTimeData.start_time,
-        duration: duration,
-        payment: paymentAmount,
-        reference_number: referenceNumber,
-        date: date,
-        top_up: false
-      });
-
-      const generalTransactionsRef = firebase.database().ref(`transactions`);
-  
-      await generalTransactionsRef.push({
-        number: number,
-        user_name: name,
-        plate_no: plateNo,
-        start_time: parkingTimeData.start_time,
-        duration: duration,
-        payment: paymentAmount,
-        reference_number: referenceNumber,
-        date: date,
-        top_up: false
-      });
-
-      parkingRef.child('parking_time').update({
-        start_time: 0,
-      });
-
-      const parkingAvailabilityRef = firebase.database().ref('parking_availability');
-      parkingAvailabilityRef.update({ occupied_spaces: firebase.database.ServerValue.increment(-1) }, (error) => {
-        if (error) {
-          alert('Error decrementing occupied_spaces:', error.message);
-        } else {
-          console.log('Occupied spaces decremented successfully.');
-        }
-      });
-
-      customerRef.remove();
-
-      const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
-      const today = new Date().toISOString().slice(0, 10);
-
-      transactionsCountAndRevenue.child(today).transaction((data) => {
-        if (data === null) {
-          return {
-            count: 1,
-            revenue: paymentAmount
-          };
-        } else {
-          return {
-            count: data.count + 1,
-            revenue: data.revenue + paymentAmount
-          };
-        }
-      });
+    
+          await userRef.update({
+            e_wallet: e_wallet - paymentAmount,
+          });  
+    
+          const referenceNumber = '800' + generateReferenceNumber();
       
-      setPayment(paymentAmount);
+          await parkingRef.child('parking_time_history').push({
+            operator_name: operatorName,
+            user_name: name,
+            plate_no: plateNo,
+            start_time: parkingTimeData.start_time,
+            duration: duration,
+            payment: paymentAmount,
+            reference_number: referenceNumber,
+          });
+      
+          const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
+          const date = new Date().toISOString();
+      
+          await operatorTransactionsRef.push({
+            number: number,
+            user_name: name,
+            plate_no: plateNo,
+            start_time: parkingTimeData.start_time,
+            duration: duration,
+            payment: paymentAmount,
+            reference_number: referenceNumber,
+            date: date,
+            top_up: false
+          });
+    
+          const generalTransactionsRef = firebase.database().ref(`transactions`);
+      
+          await generalTransactionsRef.push({
+            number: number,
+            user_name: name,
+            plate_no: plateNo,
+            start_time: parkingTimeData.start_time,
+            duration: duration,
+            payment: paymentAmount,
+            reference_number: referenceNumber,
+            date: date,
+            top_up: false
+          });
+    
+          parkingRef.child('parking_time').update({
+            start_time: 0,
+          });
+    
+          const parkingAvailabilityRef = firebase.database().ref('parking_availability');
+          parkingAvailabilityRef.update({ occupied_spaces: firebase.database.ServerValue.increment(-1) }, (error) => {
+            if (error) {
+              alert('Error decrementing occupied_spaces:', error.message);
+            } else {
+              console.log('Occupied spaces decremented successfully.');
+            }
+          });
+    
+          customerRef.remove();
+    
+          const transactionsCountAndRevenue = firebase.database().ref('transaction_count_revenue');
+          const today = new Date().toISOString().slice(0, 10);
+    
+          transactionsCountAndRevenue.child(today).transaction((data) => {
+            if (data === null) {
+              return {
+                count: 1,
+                revenue: paymentAmount
+              };
+            } else {
+              return {
+                count: data.count + 1,
+                revenue: data.revenue + paymentAmount
+              };
+            }
+          });
+
+          setPayment(paymentAmount);
+        }
+      }
     } catch (error) {
       console.error(error);
       setError('An error occurred while adding payment');

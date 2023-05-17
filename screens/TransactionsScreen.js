@@ -234,7 +234,7 @@ const TransactionsScreen = () => {
               elevation: 5,
             }}
             placeholder="Sort"
-            defaultValue={'ascending'}
+            defaultValue={'newest'}
             setValue={(value) => setSortCurrentValue(value)}
             value={sortCurrentValue}
             open={isSortOpen}

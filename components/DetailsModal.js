@@ -24,7 +24,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
     let durationText;
     if (durationInHours < 1) {
         const remainingSeconds = Math.round(durationInSeconds % 60);
-        durationText = `0 hours ${Math.floor(durationInMinutes % 60)} min ${remainingSeconds} secs`;
+        durationText = `0 mins ${remainingSeconds} secs`;
     } else {
         durationText = `${Math.floor(durationInHours)} hours ${Math.floor(durationInMinutes % 60)} min`;
     }
