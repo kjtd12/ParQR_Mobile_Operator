@@ -25,12 +25,21 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       setDuration((new Date().getTime() - snapshot.val())/1000);
     });
 
-    handleAddPayment();
+    console.log(duration);
+
+    handleDelayedAddPayment();
+    console.log(duration);
   
     return () => {
       parkingRef.off();
     };
   }, []);
+
+  const handleDelayedAddPayment = () => {
+    setTimeout(() => {
+      handleAddPayment();
+    }, 2000); // Delay of 2000 milliseconds (2 seconds)
+  };
 
   useEffect(() => {
     firebase.firestore().collection('users')
@@ -145,12 +154,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             duration: duration,
             payment: paymentAmount,
             reference_number: referenceNumber,
+            discount: discountData
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
           const date = new Date().toISOString();
       
           await operatorTransactionsRef.push({
+            profile_picture: profilePicture,
+            operator_name: operatorName,
             number: number,
             user_name: name,
             plate_no: plateNo,
@@ -159,12 +171,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             payment: paymentAmount,
             reference_number: referenceNumber,
             date: date,
-            top_up: false
+            top_up: false,
+            discount: discountData
           });
       
           const generalTransactionsRef = firebase.database().ref(`transactions`);
       
           await generalTransactionsRef.push({
+            profile_picture: profilePicture,
+            operator_name: operatorName,
             number: number,
             user_name: name,
             plate_no: plateNo,
@@ -173,7 +188,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             payment: paymentAmount,
             reference_number: referenceNumber,
             date: date,
-            top_up: false
+            top_up: false,
+            discount: discountData
           });
       
           parkingRef.child('parking_time').update({
@@ -265,11 +281,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const parkingRef = firebase.database().ref(`users/${userId}`);
           const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
           const parkingTimeData = parkingTimeSnapshot.val();
+
+          duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
       
           const durationInHours = Math.floor(duration / (60 * 60));
           const additionalHours = durationInHours - parseInt(initialHours);
     
-          duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
+
+          console.log(duration);
           
     
           let paymentAmount = parseInt(initialPayment);
@@ -322,12 +341,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             duration: duration,
             payment: paymentAmount,
             reference_number: referenceNumber,
+            discount: discountData
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
           const date = new Date().toISOString();
       
           await operatorTransactionsRef.push({
+            profile_picture: profilePicture,
+            operator_name: operatorName,
             number: number,
             user_name: name,
             plate_no: plateNo,
@@ -336,12 +358,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             payment: paymentAmount,
             reference_number: referenceNumber,
             date: date,
-            top_up: false
+            top_up: false,
+            discount: discountData
           });
-    
+      
           const generalTransactionsRef = firebase.database().ref(`transactions`);
       
           await generalTransactionsRef.push({
+            profile_picture: profilePicture,
+            operator_name: operatorName,
             number: number,
             user_name: name,
             plate_no: plateNo,
@@ -350,7 +375,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             payment: paymentAmount,
             reference_number: referenceNumber,
             date: date,
-            top_up: false
+            top_up: false,
+            discount: discountData
           });
     
           parkingRef.child('parking_time').update({

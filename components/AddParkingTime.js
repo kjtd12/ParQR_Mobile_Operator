@@ -47,7 +47,6 @@ export default function AddParkingTime({ userId }){
   
       const snapshot = await parkingTimeRef.once('value');
       const startTime = snapshot.val()?.start_time;
-      console.log("Start Time: " + startTime);
   
       if (startTime !== 0 && startTime !== undefined) {
         alert("The customer has already parked.");
