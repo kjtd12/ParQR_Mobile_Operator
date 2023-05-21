@@ -31,9 +31,7 @@ export default function AddParkingTime({ userId }){
           if (car) {
             setCarPlate(car ? car.plateNo : '');
           }
-        } else {
-          alert("User does not have a default car or haven't created a vehicle.");
-        }
+        } 
       } else {
         console.log('user does not exist')
       }
@@ -42,33 +40,34 @@ export default function AddParkingTime({ userId }){
 
   const handleAddParkingTime = async () => {
     try {
-      const userRef = firebase.database().ref('users/' + userId);
-      const parkingTimeRef = userRef.child('parking_time');
-  
-      const snapshot = await parkingTimeRef.once('value');
-      const startTime = snapshot.val()?.start_time;
-  
-      if (startTime !== 0 && startTime !== undefined) {
-        alert("The customer has already parked.");
+      if (!carPlate) {
+        alert("User does not have a default car or haven't created a vehicle.");
         return;
       } else {
-        userRef.update({ parking_time: { start_time: Date.now() } });
-  
-        const parkingRef = firebase.database().ref('parking_availability');
-        await parkingRef.child('occupied_spaces').transaction((currentValue) => {
-          return (currentValue || 0) + 1;
-        });
-  
-        if (!carPlate) {
+        const userRef = firebase.database().ref('users/' + userId);
+        const parkingTimeRef = userRef.child('parking_time');
+    
+        const snapshot = await parkingTimeRef.once('value');
+        const startTime = snapshot.val()?.start_time;
+    
+        if (startTime !== 0 && startTime !== undefined) {
+          alert("The customer has already parked.");
           return;
         } else {
+          userRef.update({ parking_time: { start_time: Date.now() } });
+    
+          const parkingRef = firebase.database().ref('parking_availability');
+          await parkingRef.child('occupied_spaces').transaction((currentValue) => {
+            return (currentValue || 0) + 1;
+          });
+
           const customerRef = firebase.database().ref('activeCustomer/' + userId);
-          await customerRef.update({ 
-            name: userName,  
-            check_in_time: Date.now(), 
-            contact_number: contactNumber, 
-            discount: discount,
-            plate: carPlate
+            await customerRef.update({ 
+              name: userName,  
+              check_in_time: Date.now(), 
+              contact_number: contactNumber, 
+              discount: discount,
+              plate: carPlate
           });
         }
       }
