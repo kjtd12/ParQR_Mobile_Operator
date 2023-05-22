@@ -44,7 +44,7 @@ const EditProfile = () => {
   
     // Update the profile in Firestore
     const currentUser = firebase.auth().currentUser;
-    const operatorRef = firebase.firestore().collection('users');
+    const operatorRef = firebase.firestore().collection('operators');
 
     // Check if the email already exists in other user accounts
     const operatorSnapshot = await operatorRef
@@ -81,7 +81,7 @@ const EditProfile = () => {
       .update({
         name: name,
         address: address,
-        number: contactNumber,
+        phone_number: contactNumber,
         email: email
       })
       .then(() => {
