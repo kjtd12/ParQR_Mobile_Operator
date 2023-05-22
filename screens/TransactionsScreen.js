@@ -56,6 +56,10 @@ const TransactionsScreen = () => {
 
   function filterAndSortTransactions(transactions, filterCurrentValue, sortCurrentValue, startDate, endDate) {
     let filteredTransactions = [...transactions];
+
+    if(filterCurrentValue !== 'custom') {
+      setModalVisible(false);
+    }
     
     switch (filterCurrentValue) {
       case 'today':
@@ -280,7 +284,14 @@ const TransactionsScreen = () => {
             setValue={(value) => setFilterCurrentValue(value)}
             value={filterCurrentValue}
             open={isFilterOpen}
-            setOpen={setIsFilterOpen}
+            setOpen={(value) => {
+            setIsFilterOpen(value);
+            if (!value){
+              if (!value && filterCurrentValue === 'custom') {
+                setModalVisible(true); // Show the date modal again if closing the dropdown with 'custom' selected
+              }
+            }
+          }}
             onChangeItem={item => console.log(item.label, item.value)}
             showTickIcon={true}
             style={{ // add this to remove the default border of the DropDownPicker

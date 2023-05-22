@@ -43,13 +43,37 @@ const EditProfile = () => {
     }
   
     // Update the profile in Firestore
-    const operatorRef = firebase.firestore().collection('operators');
-    const operatorSnapshot = await operatorRef.where('email', '==', email).get();
-  
+    const currentUser = firebase.auth().currentUser;
+    const operatorRef = firebase.firestore().collection('users');
+
+    // Check if the email already exists in other user accounts
+    const operatorSnapshot = await operatorRef
+      .where('email', '==', email)
+      .where(firebase.firestore.FieldPath.documentId(), '!=', currentUser.uid)
+      .get();
+
     if (!operatorSnapshot.empty) {
       // Email already exists in a different operator
       alert('Email already exists and is already in use on another account.');
       return;
+    }
+
+    if (selectedImage) {
+      // Upload the image and update the profile picture
+      const storage = getStorage();
+      const imageRef = ref(storage, `operator_profiles/${currentUser}.jpg`);
+      const response = await fetch(selectedImage);
+      const blob = await response.blob();
+      await uploadBytes(imageRef, blob);
+
+      const photoUrl = await getDownloadURL(imageRef);
+
+      // Update the user's profile picture URL in Firestore
+      const userRef = firebase.firestore().collection('users').doc(currentUser);
+      await userRef.update({ profile_picture: photoUrl });
+
+      // Update the local state to trigger a re-render
+      setProfilePicture(photoUrl);
     }
   
     operatorRef
@@ -69,43 +93,23 @@ const EditProfile = () => {
   };
 
   const handleUploadPhoto = async () => {
-    try {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-        return;
-      }
-  
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-  
-      if (result.canceled) {
-        return;
-      }
-  
-      const currentUser = firebase.auth().currentUser.uid;
-      const storage = getStorage();
-      const imageRef = ref(storage, `user_profiles/${currentUser}.jpg`);
-      const response = await fetch(result.uri);
-      const blob = await response.blob();
-      await uploadBytes(imageRef, blob);
-  
-      const photoUrl = await getDownloadURL(imageRef);
-  
-      // Update the user's profile picture URL in Firestore
-      const userRef = firebase.firestore().collection('operators').doc(currentUser);
-      await userRef.update({ profile_picture: photoUrl });
-  
-      // Update the local state to trigger a re-render
-      setProfilePicture(photoUrl);
-    } catch (error) {
-      console.error(error);
-      alert('An error occurred while uploading the photo.');
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+      return;
     }
+  
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (result.canceled) {
+      return;
+    }
+    setSelectedImage(result.assets[0].uri);
   };
 
   const profileImage = profilePicture ? { uri: profilePicture } : { uri: 'https://via.placeholder.com/150x150.png?text=Profile+Image' };
