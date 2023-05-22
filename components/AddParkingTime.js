@@ -97,7 +97,7 @@ export default function AddParkingTime({ userId }){
         </View>
         <View style={{ position: "relative", zIndex: 10 }}>
           <DropDownPicker
-            items={[ { label: 'PDW', value: 'pdw' }, { label: 'Senior Citizen', value: 'senior_citizen' }, { label: 'Student', value: 'student' }, { label: 'None', value: 'none' } ]}
+            items={[ { label: 'PWD', value: 'pwd' }, { label: 'Senior Citizen', value: 'senior_citizen' }, { label: 'Student', value: 'student' }, { label: 'None', value: 'none' } ]}
             defaultValue={'none'}
             placeholder="Select a discount"
             style={{ backgroundColor: '#fafafa', width: 200  }}
