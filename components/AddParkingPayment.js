@@ -442,7 +442,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   let space = spacer(50)
 
   return (
-    <View style={{ padding: 20 }}>
+    <View style={{ padding: 20, width: '95%' }}>
       {configVisible && (
       <View>
         <View style={{ flowDirection: 'row', alignItems: 'center' }}>
@@ -464,8 +464,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         <View style={{ flexDirection: 'row' ,justifyContent: 'center' }}>
           <Text style={{ fontSize: 24, color: '#213A5C' }}>Recieved Payment? </Text>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ padding: 10 }}>Total Bill: {space}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5 }}>
+          <Text style={{ padding: 10 }}>Total Bill:</Text>
           <Text>₱ {payment}</Text>
         </View>
         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
@@ -473,7 +473,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             <Text style={{ color: '#213A5C', textAlign: 'center', fontSize: 18, fontWeight: 'bold' }}>Yes</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ padding: 20, alignItems: 'center' }}>
+        <View style={{ padding: 20, alignItems: 'center', width: "100%" }}>
             <Text style={{ color: 'lightgray' }}>Click the button to verify the customer's</Text>
             <Text style={{ color: 'lightgray' }}>payment</Text>
         </View>
@@ -500,7 +500,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           </View>
           <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5 }}>
-              <Text style={{ color: 'lightgray' }}>Check-In Time:{space}</Text>
+              <Text style={{ color: 'lightgray' }}>Check-In Time:</Text>
               <Text style={{ color: '#213A5C' }}>{startTime}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5 }}>

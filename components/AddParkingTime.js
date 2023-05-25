@@ -87,7 +87,7 @@ export default function AddParkingTime({ userId }){
   let space = spacer(50)
 
   return (
-    <View>
+    <View style={{ width: '90%' }}>
       {configVisible && (
       <View>
         <View>
@@ -100,7 +100,7 @@ export default function AddParkingTime({ userId }){
             items={[ { label: 'PWD', value: 'pwd' }, { label: 'Senior Citizen', value: 'senior_citizen' }, { label: 'Student', value: 'student' }, { label: 'None', value: 'none' } ]}
             defaultValue={'none'}
             placeholder="Select a discount"
-            style={{ backgroundColor: '#fafafa', width: 200  }}
+            style={{ backgroundColor: '#fafafa' }}
             itemStyle={{
               justifyContent: 'flex-start'
             }}
@@ -138,15 +138,15 @@ export default function AddParkingTime({ userId }){
           </View>
           <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5 }}>
-              <Text style={{ color: 'gray' }}>Check-In Time:{space}</Text>
+              <Text style={{ color: 'gray' }}>Check-in time:</Text>
               <Text style={{ color: '#213A5C' }}>{startTime.toLocaleString([], { hour: 'numeric', minute: '2-digit' })}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5 }}>
-              <Text style={{ color: 'gray' }}>Plate Number: </Text>
+              <Text style={{ color: 'gray' }}>Plate Number:</Text>
               <Text style={{ color: '#213A5C' }}>{carPlate}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5 }}>
-              <Text style={{ color: 'gray' }}>Discount: </Text>
+              <Text style={{ color: 'gray' }}>Discount:</Text>
               <Text style={{ color: '#213A5C' }}>{discount}</Text>
             </View>
           </View>

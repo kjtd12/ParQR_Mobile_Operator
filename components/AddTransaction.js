@@ -11,6 +11,7 @@ export default function AddTransaction({ userId }){
   const [operatorName, setOperatorName] = useState('');
   const [number, setNumber] = useState(null);
   const [carPlate, setCarPlate] = useState('');
+  
 
   useEffect(() => {
     firebase.firestore().collection('operators')
@@ -97,6 +98,7 @@ export default function AddTransaction({ userId }){
     
     await operatorTransactionsRef.push({
       operator_name: operatorName,
+      profile_picture: profilePicture,
       number: number,
       user_name: userName,
       plate_no: carPlate,
@@ -111,6 +113,7 @@ export default function AddTransaction({ userId }){
   
     await generalTransactionsRef.push({
       operator_name: operatorName,
+      profile_picture: profilePicture,
       number: number,
       user_name: userName,
       plate_no: carPlate,
