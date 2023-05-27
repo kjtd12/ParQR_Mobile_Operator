@@ -158,39 +158,69 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
-          const date = new Date().toISOString();
-      
-          await operatorTransactionsRef.push({
-            profile_picture: profilePicture,
-            operator_name: operatorName,
-            number: number,
-            user_name: name,
-            plate_no: plateNo,
-            start_time: parkingTimeData.start_time,
-            duration: duration,
-            payment: paymentAmount,
-            reference_number: referenceNumber,
-            date: date,
-            top_up: false,
-            discount: discountData
-          });
-      
           const generalTransactionsRef = firebase.database().ref(`transactions`);
-      
-          await generalTransactionsRef.push({
-            profile_picture: profilePicture,
-            operator_name: operatorName,
-            number: number,
-            user_name: name,
-            plate_no: plateNo,
-            start_time: parkingTimeData.start_time,
-            duration: duration,
-            payment: paymentAmount,
-            reference_number: referenceNumber,
-            date: date,
-            top_up: false,
-            discount: discountData
-          });
+          const date = new Date().toISOString();
+
+          if(profilePicture == null) {
+            await operatorTransactionsRef.push({
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+
+            await generalTransactionsRef.push({
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+
+          } else {
+            await operatorTransactionsRef.push({
+              profile_picture: profilePicture,
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+
+            await generalTransactionsRef.push({
+              profile_picture: profilePicture,
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+          }
       
           parkingRef.child('parking_time').update({
             start_time: 0,
@@ -345,39 +375,69 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
-          const date = new Date().toISOString();
-      
-          await operatorTransactionsRef.push({
-            profile_picture: profilePicture,
-            operator_name: operatorName,
-            number: number,
-            user_name: name,
-            plate_no: plateNo,
-            start_time: parkingTimeData.start_time,
-            duration: duration,
-            payment: paymentAmount,
-            reference_number: referenceNumber,
-            date: date,
-            top_up: false,
-            discount: discountData
-          });
-      
           const generalTransactionsRef = firebase.database().ref(`transactions`);
-      
-          await generalTransactionsRef.push({
-            profile_picture: profilePicture,
-            operator_name: operatorName,
-            number: number,
-            user_name: name,
-            plate_no: plateNo,
-            start_time: parkingTimeData.start_time,
-            duration: duration,
-            payment: paymentAmount,
-            reference_number: referenceNumber,
-            date: date,
-            top_up: false,
-            discount: discountData
-          });
+          const date = new Date().toISOString();
+
+          if(profilePicture == null) {
+            await operatorTransactionsRef.push({
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+
+            await generalTransactionsRef.push({
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+
+          } else {
+            await operatorTransactionsRef.push({
+              profile_picture: profilePicture,
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+
+            await generalTransactionsRef.push({
+              profile_picture: profilePicture,
+              operator_name: operatorName,
+              number: number,
+              user_name: name,
+              plate_no: plateNo,
+              start_time: parkingTimeData.start_time,
+              duration: duration,
+              payment: paymentAmount,
+              reference_number: referenceNumber,
+              date: date,
+              top_up: false,
+              discount: discountData
+            });
+          }
     
           parkingRef.child('parking_time').update({
             start_time: 0,
