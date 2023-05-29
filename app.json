@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "qr_app_operator",
+    "name": "ParQR Operator",
     "slug": "qr_app_operator",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.algo_chad.qr_app_operator"
