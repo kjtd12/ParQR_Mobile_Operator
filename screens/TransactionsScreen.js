@@ -254,7 +254,7 @@ const TransactionsScreen = () => {
               color: '#213A5C',
             }}
             labelStyle={{ // add this to style the label text
-              fontSize: 16,
+              fontSize: 12,
               color: '#213A5C',
             }}
             arrowIconStyle={{ // add this to style the arrow icon
@@ -303,7 +303,7 @@ const TransactionsScreen = () => {
               color: '#213A5C',
             }}
             labelStyle={{ // add this to style the label text
-              fontSize: 16,
+              fontSize: 12,
               color: '#213A5C',
             }}
             arrowIconStyle={{ // add this to style the arrow icon

@@ -56,7 +56,6 @@ const Tabs = () => {
                     backgroundColor: '#213A5C',
                     borderRadius: 15,
                     height: 90,
-                    ...style.shadow
                 },
             }}
         >
