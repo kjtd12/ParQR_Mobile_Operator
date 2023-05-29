@@ -325,10 +325,13 @@ const TransactionsScreen = () => {
 
 export default TransactionsScreen;
 
+const scalingFactor = 0.8; // Adjust the scaling factor as needed
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+    padding: 10 * scalingFactor,
   },
   transactionsList: {
     flex: 1,
@@ -336,21 +339,21 @@ const styles = StyleSheet.create({
   },
   transactionItem: {
     backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 16,
+    borderRadius: 10 * scalingFactor,
+    padding: 16 * scalingFactor,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },  
+    marginVertical: 8 * scalingFactor,
+    marginHorizontal: 16 * scalingFactor,
+  },
   transactionItemHeader: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between', // Align the header to the left and right edges
-    marginBottom: 10,
+    marginBottom: 10 * scalingFactor,
   },
   transactionItemInfo: {
     alignItems: 'flex-end', // Align the info to the left edge
@@ -360,54 +363,55 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopColor: '#ccc',
-    borderTopWidth: 1,
-    paddingTop: 10,
+    borderTopWidth: 1 * scalingFactor,
+    paddingTop: 10 * scalingFactor,
   },
   transactionItemTitle: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 16 * scalingFactor,
   },
   transactionItemSubtitle: {
     color: '#777',
-    fontSize: 14,
+    fontSize: 14 * scalingFactor,
   },
   transactionItemDivider: {
     backgroundColor: '#ccc',
-    height: 1,
+    height: 1 * scalingFactor,
     width: '100%',
-    marginVertical: 10,
+    marginVertical: 10 * scalingFactor,
   },
   transactionItemDate: {
-    fontSize: 14,
+    fontSize: 14 * scalingFactor,
     color: '#777',
   },
   transactionItemTime: {
-    fontSize: 14,
+    fontSize: 14 * scalingFactor,
     color: '#777',
   },
   transactionItemAmount: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 16 * scalingFactor,
   },
   searchContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#EFF1F8',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    marginHorizontal: 10,
-    marginVertical: 5,
+    borderRadius: 15 * scalingFactor,
+    paddingHorizontal: 10 * scalingFactor,
+    marginHorizontal: 10 * scalingFactor,
+    marginVertical: 5 * scalingFactor,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    fontSize: 16 * scalingFactor,
+    paddingVertical: 10 * scalingFactor,
+    paddingHorizontal: 10 * scalingFactor,
   },
   searchIcon: {
-    width: 20,
-    height: 20,
+    width: 20 * scalingFactor,
+    height: 20 * scalingFactor,
     tintColor: 'black',
   },
 });
+

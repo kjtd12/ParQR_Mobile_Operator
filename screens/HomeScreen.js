@@ -37,82 +37,85 @@ const HomeScreen = () => {
 
 export default HomeScreen
 
+const scalingFactor = 0.8; // Adjust the scaling factor as needed
+
 const styles = StyleSheet.create({
   container: {
-    padding: 10
+    padding: 10 * scalingFactor,
   },
   card: {
     backgroundColor: '#213A5C',
-    borderRadius: 15,
-    padding: 20,
+    borderRadius: 15 * scalingFactor,
+    padding: 20 * scalingFactor,
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 30 * scalingFactor,
     width: '100%',
-    height: 'auto'
+    height: 'auto',
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 18 * scalingFactor,
     fontWeight: 'bold',
-    marginTop: 15,
-    marginBottom: 40,
+    marginTop: 15 * scalingFactor,
+    marginBottom: 40 * scalingFactor,
     color: 'white',
   },
   cardText: {
-    marginTop: 70,
-    fontSize: 100,
+    marginTop: 70 * scalingFactor,
+    fontSize: 100 * scalingFactor,
     fontWeight: 'bold',
     color: 'white',
-    paddingBottom: 20,
+    paddingBottom: 20 * scalingFactor,
   },
   cardLine: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 1 * scalingFactor,
     borderColor: '#F3BB01',
     width: '100%',
-    marginBottom: 10,
+    marginBottom: 10 * scalingFactor,
   },
   spaceLine: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 1 * scalingFactor,
     borderColor: '#213A5C',
     width: '100%',
-    marginBottom: 10,
+    marginBottom: 10 * scalingFactor,
   },
   spacesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 30,
+    marginTop: 30 * scalingFactor,
   },
   space: {
-    borderRadius: 15,
-    padding: 20,
+    borderRadius: 15 * scalingFactor,
+    padding: 20 * scalingFactor,
     alignItems: 'center',
     width: '100%',
-    height: 'auto'
+    height: 'auto',
   },
   spaceTitle: {
-    fontSize: 18,
+    fontSize: 18 * scalingFactor,
     fontWeight: 'bold',
     color: '#213A5C',
-    marginTop: 15,
-    marginBottom: 5
+    marginTop: 15 * scalingFactor,
+    marginBottom: 5 * scalingFactor,
   },
   spaceText: {
-    fontSize: 100,
+    fontSize: 100 * scalingFactor,
     fontWeight: 'bold',
-    marginTop: 20,
-    paddingBottom: 20,
-    color: '#213A5C'
+    marginTop: 20 * scalingFactor,
+    paddingBottom: 20 * scalingFactor,
+    color: '#213A5C',
   },
   button: {
-    backgroundColor: "#213A5C",
+    backgroundColor: '#213A5C',
     width: '60%',
-    padding: 15,
-    borderRadius: 10,
+    padding: 15 * scalingFactor,
+    borderRadius: 10 * scalingFactor,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 40 * scalingFactor,
   },
   buttonText: {
-    color: "white",
+    color: 'white',
     fontWeight: '700',
-    fontSize: 16
-  }
-})
+    fontSize: 16 * scalingFactor,
+  },
+});
+

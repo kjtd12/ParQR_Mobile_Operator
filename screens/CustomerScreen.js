@@ -94,27 +94,30 @@ const CustomerScreen = () => {
 
 export default CustomerScreen
 
+const scalingFactor = 0.8; // Adjust the scaling factor as needed
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+    padding: 10
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 16,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    borderRadius: 10 * scalingFactor,
+    padding: 16 * scalingFactor,
+    marginVertical: 8 * scalingFactor,
+    marginHorizontal: 16 * scalingFactor,
     elevation: 2,
-    borderWidth: 1,
+    borderWidth: 1 * scalingFactor,
     borderColor: '#ddd',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2 * scalingFactor,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowRadius: 3.84 * scalingFactor,
     elevation: 5,
   },
   customerItemTitle: {
@@ -123,11 +126,11 @@ const styles = StyleSheet.create({
   },
   customerItemTitleText: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 18 * scalingFactor,
   },
   customerItemSubTitleText: {
     color: '#777',
-    fontSize: 16,
+    fontSize: 16 * scalingFactor,
   },
   customerItemDescription: {
     flexDirection: 'row',
@@ -135,31 +138,31 @@ const styles = StyleSheet.create({
   },
   customerItemDescriptionText: {
     color: '#777',
-    fontSize: 16,
+    fontSize: 16 * scalingFactor,
   },
   customerItemDescriptionText_1: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 16 * scalingFactor,
   },
   searchContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#EFF1F8',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    marginHorizontal: 10,
-    marginVertical: 5,
+    borderRadius: 15 * scalingFactor,
+    paddingHorizontal: 10 * scalingFactor,
+    marginHorizontal: 10 * scalingFactor,
+    marginVertical: 5 * scalingFactor,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    fontSize: 16 * scalingFactor,
+    paddingVertical: 10 * scalingFactor,
+    paddingHorizontal: 10 * scalingFactor,
   },
   searchIcon: {
-    width: 20,
-    height: 20,
+    width: 20 * scalingFactor,
+    height: 20 * scalingFactor,
     tintColor: 'black',
   },
-})
+});

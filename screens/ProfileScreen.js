@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     padding: Math.round(15 * scalingFactor),
     width: '95%',
     marginBottom: Math.round(10 * scalingFactor),
-    marginTop: Math.round(40 * scalingFactor),
+    marginTop: Math.round(60 * scalingFactor),
   },
   menuList: {
     width: '100%',
