@@ -6,7 +6,7 @@ import LoginStack from './navigation/loginStack';
 export default function App() {
   return (
     <NavigationContainer>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar style="dark" />
       <LoginStack/>
     </NavigationContainer>
   );
