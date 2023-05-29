@@ -9,10 +9,16 @@ const DateModal = ({ isVisible, onClose, onSubmit }) => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   const handleStartDatePress = () => {
+    if (Platform.OS === 'ios') {
+      setShowStartDatePicker(true);
+    }
     setShowStartDatePicker(true);
   };
 
   const handleEndDatePress = () => {
+    if (Platform.OS === 'ios') {
+      setShowEndDatePicker(true);
+    }
     setShowEndDatePicker(true);
   };
 
