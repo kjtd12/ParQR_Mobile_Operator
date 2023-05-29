@@ -140,7 +140,7 @@ const ProfileScreen = () => {
 
 export default ProfileScreen
 
-const scalingFactor = 0.6;
+const scalingFactor = 0.8;
 
 const styles = StyleSheet.create({
   container: {
@@ -154,12 +154,12 @@ const styles = StyleSheet.create({
     color: '#213A5C',
   },
   name: {
-    fontSize: Math.round(20 * scalingFactor),
+    fontSize: Math.round(22 * scalingFactor),
     fontWeight: 'bold',
     marginBottom: Math.round(10 * scalingFactor),
   },
   email: {
-    fontSize: Math.round(16 * scalingFactor),
+    fontSize: Math.round(18 * scalingFactor),
     marginBottom: Math.round(30 * scalingFactor),
   },
   menuContainer: {
@@ -186,10 +186,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   menuItemLabel: {
-    fontSize: Math.round(16 * scalingFactor),
+    fontSize: Math.round(18 * scalingFactor),
   },
   menuItemDescription: {
-    fontSize: Math.round(10 * scalingFactor),
+    fontSize: Math.round(12 * scalingFactor),
     color: '#aaa',
   },
   moreContainer: {

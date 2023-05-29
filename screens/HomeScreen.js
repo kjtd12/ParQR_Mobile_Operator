@@ -37,7 +37,7 @@ const HomeScreen = () => {
 
 export default HomeScreen
 
-const scalingFactor = 0.8; // Adjust the scaling factor as needed
+const scalingFactor = 0.9; // Adjust the scaling factor as needed
 
 const styles = StyleSheet.create({
   container: {
