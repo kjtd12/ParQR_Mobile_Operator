@@ -144,7 +144,7 @@ export default function AddTransaction({ userId }){
           />
         </View>
         <Text style={{ padding: 10, color: '#213A5C' }}>{userName}</Text>
-        <Text style={{ padding: 10, color: '#213A5C' }}>Enter the amount bellow</Text>
+        <Text style={{ padding: 10, color: '#213A5C' }}>Enter the amount below</Text>
       </View>
       <TextInput
         placeholder="Amount"

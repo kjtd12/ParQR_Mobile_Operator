@@ -118,7 +118,7 @@ export default function ScanAndAddTransaction() {
         <View>
           <Modal visible={showTopUp} animationType={'slide'} transparent={true} >
               <TouchableOpacity style={styles.operationModal} onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}}>
-                <View style={[styles.card, {paddingVertical: 20}]}>
+                <View style={[styles.card]}>
                   <AddTransaction userId={userId} />
                 </View>
                 <TouchableOpacity onPress={() => {setScanned(false), setQrVisible(false), setShowTopUp(false)}} style={{ backgroundColor: '#F3BB01', paddingHorizontal: 60, paddingVertical: 10 , borderRadius: 5, marginTop: 40 }}>
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    height: '50%',
+    height: 'auto',
+    paddingVertical: 30,
     backgroundColor: 'white',
     borderRadius: 10,
     elevation: 5,

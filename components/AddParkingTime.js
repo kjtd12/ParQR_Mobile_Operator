@@ -87,7 +87,7 @@ export default function AddParkingTime({ userId }){
   let space = spacer(50)
 
   return (
-    <View style={{ width: '90%' }}>
+    <View style={{ width: '50%' }}>
       {configVisible && (
       <View>
         <View>
