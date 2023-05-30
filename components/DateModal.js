@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image, Platform, Button } from 'react-native';
+import { Modal, View, Text, TextInput, TouchableOpacity, TouchableHighlight, Image, Platform, Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const DateModal = ({ isVisible, onClose, onSubmit }) => {
@@ -8,17 +8,16 @@ const DateModal = ({ isVisible, onClose, onSubmit }) => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  const TouchableComponent = Platform.select({
+    ios: TouchableHighlight,
+    android: TouchableOpacity,
+  });
+
   const handleStartDatePress = () => {
-    if (Platform.OS === 'ios') {
-      setShowStartDatePicker(true);
-    }
     setShowStartDatePicker(true);
   };
 
   const handleEndDatePress = () => {
-    if (Platform.OS === 'ios') {
-      setShowEndDatePicker(true);
-    }
     setShowEndDatePicker(true);
   };
 
@@ -53,44 +52,67 @@ const DateModal = ({ isVisible, onClose, onSubmit }) => {
               Custom Range
             </Text>
           </View>
-          <Text style={{ paddingVertical: 5, color: '#213A5C', fontWeight: 'bold' }}>From</Text>
-          <TouchableWithoutFeedback onPress={handleStartDatePress}>
-            <View style={{ borderWidth: 1, borderColor: '#213A5C', borderRadius: 5, marginBottom: 20 }}>
-              <TextInput
-                value={startDate ? startDate.toLocaleDateString() : ''}
-                placeholder="Select a start date"
-                style={{ padding: 10 }}
-                editable={false}
-              />
+          <View>
+          <Text style={{ color: '#213A5C', fontWeight: 'bold' }}>From</Text>
+              <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+                <TouchableComponent
+                  activeOpacity={1}
+                  onPress={handleStartDatePress}
+                  style={{ flex: 1 }}
+                >
+                  <View style={{ borderWidth: 2, borderColor: '#213A5C', borderRadius: 5, marginRight: 10 }}>
+                    <TextInput
+                      value={startDate ? startDate.toLocaleDateString() : ''}
+                      placeholder="Select a start date"
+                      style={{ padding: 10 }}
+                      editable={false}
+                    />
+                  </View>
+                </TouchableComponent>
+                {Platform.OS === 'ios' && (
+                  <Button title="Select" onPress={handleStartDatePress} />
+                )}
+              </View>
+              {showStartDatePicker && (
+                <DateTimePicker
+                  value={startDate || new Date()}
+                  mode="date"
+                  display="default"
+                  onChange={handleStartDateChange}
+                />
+              )}
             </View>
-          </TouchableWithoutFeedback>
-          {showStartDatePicker && (
-            <DateTimePicker
-              value={startDate || new Date()}
-              mode="date"
-              display="default"
-              onChange={handleStartDateChange}
-            />
-          )}
-          <Text style={{ paddingVertical: 5, color: '#213A5C', fontWeight: 'bold' }}>To</Text>
-          <TouchableWithoutFeedback onPress={handleEndDatePress}>
-            <View style={{ borderWidth: 1, borderColor: '#213A5C', borderRadius: 5, marginBottom: 20 }}>
-              <TextInput
-                value={endDate ? endDate.toLocaleDateString() : ''}
-                placeholder="Select an end date"
-                style={{ padding: 10 }}
-                editable={false}
-              />
+
+            <Text style={{ color: '#213A5C', fontWeight: 'bold' }}>To</Text>
+
+            <View style={{ flexDirection: 'row', marginBottom: 20  }}>
+              <TouchableComponent
+                activeOpacity={1}
+                onPress={handleEndDatePress}
+                style={{ flex: 1 }}
+              >
+                <View style={{ borderWidth: 2, borderColor: '#213A5C', borderRadius: 5, marginRight: 10 }}>
+                  <TextInput
+                    value={endDate ? endDate.toLocaleDateString() : ''}
+                    placeholder="Select an end date"
+                    style={{ padding: 10 }}
+                    editable={false}
+                  />
+                </View>
+              </TouchableComponent>
+              {Platform.OS === 'ios' && (
+                <Button title="Select" onPress={handleEndDatePress} />
+              )}
             </View>
-          </TouchableWithoutFeedback>
-          {showEndDatePicker && (
-            <DateTimePicker
-              value={endDate || new Date()}
-              mode="date"
-              display="default"
-              onChange={handleEndDateChange}
-            />
-          )}
+
+            {showEndDatePicker && (
+              <DateTimePicker
+                value={endDate || new Date()}
+                mode="date"
+                display="default"
+                onChange={handleEndDateChange}
+              />
+            )}
           <TouchableOpacity onPress={handleSubmit} style={{ backgroundColor: '#213A5C', borderRadius: 5, padding: 10, marginTop: 30 }}>
             <Text style={{ color: '#fff', textAlign: 'center', fontWeight: 'bold' }}>Confirm</Text>
           </TouchableOpacity>
