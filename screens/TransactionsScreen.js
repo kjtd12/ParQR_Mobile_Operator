@@ -249,13 +249,12 @@ const TransactionsScreen = () => {
               borderWidth: 0,
               width: 100 // add this to set the width
             }}
-            dropDownStyle={{ // add this to remove the default border of the DropDownPicker dropdown
-              borderWidth: 0,
-              fontSize: 10,
-              color: '#213A5C',
+            textStyle={{
+              fontSize: 12,
+              color: '#213A5C'
             }}
             labelStyle={{ // add this to style the label text
-              fontSize: 10,
+              fontSize: 12,
               color: '#213A5C',
             }}
             arrowIconStyle={{ // add this to style the arrow icon
@@ -299,13 +298,11 @@ const TransactionsScreen = () => {
               borderWidth: 0,
               width: 100  // add this to set the width
             }}
-            dropDownStyle={{ // add this to remove the default border of the DropDownPicker dropdown
-              borderWidth: 0,
-              fontSize: 10,
-              color: '#213A5C',
+            textStyle={{
+              fontSize: 12
             }}
             labelStyle={{ // add this to style the label text
-              fontSize: 10,
+              fontSize: 12,
               color: '#213A5C',
             }}
             arrowIconStyle={{ // add this to style the arrow icon
