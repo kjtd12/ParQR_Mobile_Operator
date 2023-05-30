@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image, Platform } from 'react-native';
+import { Modal, View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image, Platform, Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const DateModal = ({ isVisible, onClose, onSubmit }) => {
