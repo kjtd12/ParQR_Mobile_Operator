@@ -12,6 +12,7 @@ const EditProfile = () => {
   const [contactNumber, setContactNumber] = useState("");
   const [email, setEmail] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => { 
     firebase.firestore().collection('operators')
