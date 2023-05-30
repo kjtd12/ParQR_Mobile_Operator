@@ -197,36 +197,41 @@ const EditProfile = () => {
 
 export default EditProfile
 
+const scalingFactor = 0.7; // Adjust the scaling factor value as needed
+
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+    // Apply scaling to margin and padding
+    marginVertical: 10 * scalingFactor,
+    paddingHorizontal: 7 * scalingFactor,
   },
   editContainer: {
-    marginVertical: 20,
-    paddingHorizontal: 7,
+    marginVertical: 20 * scalingFactor,
+    paddingHorizontal: 7 * scalingFactor,
   },
   editRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: 10 * scalingFactor,
   },
   editTitle: {
     color: '#777',
-    fontSize: 20,
+    fontSize: 20 * scalingFactor,
   },
   cardTop: {
-    marginTop: 40,
-    borderRadius: 7,
-    padding: 16,
-    width: '100%'
+    marginTop: 40 * scalingFactor,
+    borderRadius: 7 * scalingFactor,
+    padding: 16 * scalingFactor,
+    width: '100%',
   },
   cards: {
     backgroundColor: '#fff',
-    borderRadius: 7,
-    padding: 16,
-    marginVertical: 10,
-    borderWidth: 0.5,
+    borderRadius: 7 * scalingFactor,
+    padding: 16 * scalingFactor,
+    marginVertical: 10 * scalingFactor,
+    borderWidth: 0.5 * scalingFactor,
     borderColor: '#ddd',
-    width: '100%'
-  }
+    width: '100%',
+  },
 });
