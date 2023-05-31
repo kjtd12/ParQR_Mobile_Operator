@@ -123,6 +123,7 @@ const EditProfile = () => {
   return (
     <KeyboardAvoidingView 
       style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'undefined'}
     >
       <View style={styles.cardTop}>
         <View style={{ marginBottom: 20 }}>
