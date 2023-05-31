@@ -21,6 +21,7 @@ const TransactionsScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [detailData, setDetailData] = useState([]);
+  const [initialFilterValue, setInitialFilterValue] = useState('');
   const [operatorName, setOperatorName] = useState('');
 
   useEffect(() => {
@@ -143,10 +144,20 @@ const TransactionsScreen = () => {
   }
   
   useEffect(() => {
+    const isCustomFilter = filterCurrentValue === 'custom';
     const filteredTransactions = filterTransactions(transactions, filterCurrentValue, startDate, endDate, setModalVisible);
     const sortedTransactions = sortTransactions(filteredTransactions, sortCurrentValue);
     setFilteredTransactions(sortedTransactions);
-  }, [transactions, filterCurrentValue, sortCurrentValue, startDate, endDate, setModalVisible]);
+  
+    if (initialFilterValue !== 'custom') {
+      setModalVisible(isCustomFilter);
+    }
+  }, [transactions, filterCurrentValue, sortCurrentValue, startDate, endDate, setModalVisible, initialFilterValue]);
+  
+  // Update the initialFilterValue when the filterCurrentValue changes
+  useEffect(() => {
+    setInitialFilterValue(filterCurrentValue);
+  }, [filterCurrentValue]);
   
   
   function formatTransactions(transactions, searchQuery) {
@@ -314,12 +325,13 @@ const TransactionsScreen = () => {
             open={isFilterOpen}
             setOpen={(value) => {
             setIsFilterOpen(value);
-            if (!value){
-              if (!value && filterCurrentValue === 'custom') {
-                setModalVisible(true); // Show the date modal again if closing the dropdown with 'custom' selected
+              if (!value){
+                if (filterCurrentValue === 'custom') {
+                  setModalVisible(true); // Show the date modal again if closing the dropdown with 'custom' selected
+                }
               }
-            }
-          }}
+             
+            }}
             onChangeItem={item => console.log(item.label, item.value)}
             showTickIcon={true}
             style={{ // add this to remove the default border of the DropDownPicker
@@ -327,7 +339,8 @@ const TransactionsScreen = () => {
               width: 100  // add this to set the width
             }}
             textStyle={{
-              fontSize: 12
+              fontSize: 12,
+              color: '#213A5C'
             }}
             labelStyle={{ // add this to style the label text
               fontSize: 12,

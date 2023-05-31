@@ -41,12 +41,14 @@ const DateModal = ({ isVisible, onClose, onSubmit }) => {
     <Modal visible={isVisible} animationType="slide" transparent={true}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.1)' }}>
         <View style={{ backgroundColor: '#fff', borderRadius: 10, padding: 20, width: '90%' }}>
-          <TouchableOpacity onPress={onClose} style={{ position: 'absolute', top: 10, right: 15, padding: 5 }}>
-            <Image
-              source={require('../assets/transactionIcons/close.png')}
-              style={{ width: 20, height: 20 }}
-            />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <TouchableOpacity onPress={onClose} style={{ margin: 10 }}>
+              <Image
+                source={require('../assets/transactionIcons/close.png')}
+                style={{ width: 20, height: 20 }}
+              />
+            </TouchableOpacity>
+          </View>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 30, marginTop: 20, color: '#213A5C' }}>
               Custom Range
