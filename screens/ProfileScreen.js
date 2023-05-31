@@ -31,7 +31,7 @@ const ProfileScreen = () => {
         console.log('user does not exist')
       }
     })
-  }, []);
+  });
 
   const handleSignout = () => {
       auth
