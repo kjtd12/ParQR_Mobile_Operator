@@ -8,10 +8,10 @@ const auth = firebase.auth()
 const ProfileScreen = () => {
   const [data, setData] = useState('')
   const [profilePicture, setProfilePicture] = useState(null);
-  const [uid, setUID] = useState(null);
-  const navigation = useNavigation()
 
-  setUID(auth.currentUser.uid);
+  const navigation = useNavigation()
+  const uid = auth.currentUser.uid;
+ 
 
   const changePassword = () => {
     firebase.auth().sendPasswordResetEmail(firebase.auth().currentUser.email)
