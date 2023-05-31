@@ -74,7 +74,6 @@ const EditProfile = () => {
       await userRef.update({ profile_picture: photoUrl });
 
       // Update the local state to trigger a re-render
-      setProfilePicture(photoUrl);
     }
   
     operatorRef
@@ -113,6 +112,7 @@ const EditProfile = () => {
       }
   
       setSelectedImage(result.assets[0].uri);
+      setProfilePicture(photoUrl);
     } catch (error) {
       // Handle the error
       console.log(error);
