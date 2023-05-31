@@ -8,7 +8,10 @@ const auth = firebase.auth()
 const ProfileScreen = () => {
   const [data, setData] = useState('')
   const [profilePicture, setProfilePicture] = useState(null);
+  const [uid, setUID] = useState(null);
   const navigation = useNavigation()
+
+  setUID(auth.currentUser.uid);
 
   const changePassword = () => {
     firebase.auth().sendPasswordResetEmail(firebase.auth().currentUser.email)
@@ -21,13 +24,12 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     firebase.firestore().collection('operators')
-    .doc(firebase.auth().currentUser.uid).get()
+    .doc(uid).get()
     .then((snapshot) => {
       if(snapshot.exists){
         setData(snapshot.data())
         setProfilePicture(snapshot.get('profile_picture'));
       } else {
-        console.log(firebase.auth().currentUser.uid)
         console.log('user does not exist')
       }
     })
