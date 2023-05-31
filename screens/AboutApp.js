@@ -25,7 +25,7 @@ const AboutApp = () => {
                 ParQR (Parker) is a mobile app designed to inform users about available parking spaces in a parking area. It streamlines the parking entry and exit process using QR codes and gathers data on which can be analyzed to make informed business decisions.
             </Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.replace('App', { screen: 'Profile' })} style={{ alignItems: 'center', backgroundColor: '#F3BB01', borderRadius: 10, paddingVertical: 15, paddingHorizontal: 70 }}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ alignItems: 'center', backgroundColor: '#F3BB01', borderRadius: 10, paddingVertical: 15, paddingHorizontal: 70 }}>
             <Text style={{ color: 'white', fontSize: 24, fontWeight: 'bold' }}>Okay</Text>
           </TouchableOpacity>
         </View>
