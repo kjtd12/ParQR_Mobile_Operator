@@ -44,12 +44,16 @@ const LoginScreen = () => {
 
     //Forget Passwrod function
     const forgetPassword = () => {
-        firebase.auth().sendPasswordResetEmail(email)
-        .then(() => {
-            alert('Password reset email sent');
-        }).catch((error) => {
-            alert(error)
-        })
+        if (email != null && email != '') {
+            firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                alert('Password reset email sent');
+            }).catch((error) => {
+                alert(error)
+            })
+        } else {
+            alert("Please enter email address on the email address field to reset password.")
+        }
     }
 
     //Log in Function
@@ -76,7 +80,6 @@ const LoginScreen = () => {
     return (
         <KeyboardAvoidingView
             style={styles.container}
-            behavior="padding"
         >
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Image 
