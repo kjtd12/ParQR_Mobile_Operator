@@ -127,7 +127,7 @@ const EditProfile = () => {
       <View style={styles.cardTop}>
         <View style={{ marginBottom: 20 }}>
           <View style={{ flexDirection: 'row',  alignItems: 'center', justifyContent: 'space-between' }}>
-            <TouchableOpacity onPress={() => navigation.replace('App', { screen: 'Profile' })} style={{ flex: 1, alignItems: 'flex-start' }}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ flex: 1, alignItems: 'flex-start' }}>
               <Image
                 source={ require('../assets/icons/ArrowLeft.png') }
               />
