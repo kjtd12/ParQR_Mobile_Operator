@@ -64,33 +64,53 @@ const TransactionsScreen = () => {
     switch (filterCurrentValue) {
       case 'today':
         filteredTransactions = filteredTransactions.filter((transaction) => {
-          const transactionDate = new Date(transaction.start_time);
-          const today = new Date();
-          return transactionDate.toDateString() === today.toDateString();
-        });
+          let transactionDate = new Date(transaction.start_time).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+          const today = new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+        
+          if (transaction.top_up) {
+            transactionDate = transaction.formattedDate;
+          } 
+        
+          return transactionDate === today;
+        });        
         break;
       case 'sevenDays':
         filteredTransactions = filteredTransactions.filter((transaction) => {
-          const transactionDate = new Date(transaction.start_time);
+          let transactionDate = new Date(transaction.start_time).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
           const today = new Date();
-          const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7));
+          const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7)).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+          
+          if (transaction.top_up) {
+            transactionDate = transaction.formattedDate;
+          }
+
           return transactionDate >= sevenDaysAgo;
         });
         break;
       case 'thirtyDays':
         filteredTransactions = filteredTransactions.filter((transaction) => {
-          const transactionDate = new Date(transaction.start_time);
+          let transactionDate = new Date(transaction.start_time).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
           const today = new Date();
-          const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30));
+          const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30)).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+
+          if (transaction.top_up) {
+            transactionDate = transaction.formattedDate;
+          }
+
           return transactionDate >= thirtyDaysAgo;
         });
         break;
       case 'custom':
         setModalVisible(true)
         filteredTransactions = filteredTransactions.filter((transaction) => {
-          const transactionDate = new Date(transaction.start_time);
-          const start = startDate ? new Date(startDate.setDate(startDate.getDate())) : '';
-          const end = endDate ? new Date(endDate.setDate(endDate.getDate())) : '';
+          let transactionDate = new Date(transaction.start_time).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+          const start = startDate ? new Date(startDate.setDate(startDate.getDate())).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : '';
+          const end = endDate ? new Date(endDate.setDate(endDate.getDate())).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : '';
+
+          if (transaction.top_up) {
+            transactionDate = transaction.formattedDate;
+          }
+          
           return transactionDate >= start && transactionDate <= end;
         });
         break;
@@ -167,9 +187,11 @@ const TransactionsScreen = () => {
     if (item.top_up) {
       formattedDate = item.formattedDate;
       formattedTime = item.formattedTime;
+      // console.log(item.formattedDate);
     } else {
       formattedDate = item.date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
       formattedTime = item.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      // console.log(item.date);
     }
   
     const handlePress = () => {
