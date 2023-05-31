@@ -53,14 +53,13 @@ const TransactionsScreen = () => {
     };
   }, [operatorUid]);
   
-
-  function filterAndSortTransactions(transactions, filterCurrentValue, sortCurrentValue, startDate, endDate) {
+  function filterTransactions(transactions, filterCurrentValue, startDate, endDate, setModalVisible) {
     let filteredTransactions = [...transactions];
-
-    if(filterCurrentValue !== 'custom') {
+  
+    if (filterCurrentValue !== 'custom') {
       setModalVisible(false);
     }
-    
+  
     switch (filterCurrentValue) {
       case 'today':
         filteredTransactions = filteredTransactions.filter((transaction) => {
@@ -101,7 +100,6 @@ const TransactionsScreen = () => {
         });
         break;
       case 'custom':
-        setModalVisible(true)
         filteredTransactions = filteredTransactions.filter((transaction) => {
           let transactionDate = new Date(transaction.start_time).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
           const start = startDate ? new Date(startDate.setDate(startDate.getDate())).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : '';
@@ -118,25 +116,38 @@ const TransactionsScreen = () => {
         break;
     }
   
+    return filteredTransactions;
+  }
+  
+  function sortTransactions(transactions, sortCurrentValue) {
+    let sortedTransactions = [...transactions];
+  
     switch (sortCurrentValue) {
       case 'ascending':
-        filteredTransactions.sort((a, b) => a.user_name.localeCompare(b.user_name));
+        sortedTransactions.sort((a, b) => a.user_name.localeCompare(b.user_name));
         break;
       case 'descending':
-        filteredTransactions.sort((a, b) => b.user_name.localeCompare(a.user_name));
+        sortedTransactions.sort((a, b) => b.user_name.localeCompare(a.user_name));
         break;
       case 'newest':
-        filteredTransactions.sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
+        sortedTransactions.sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
         break;
       case 'oldest':
-        filteredTransactions.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+        sortedTransactions.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
         break;
       default:
         break;
     }
-    
-    return filteredTransactions;
+  
+    return sortedTransactions;
   }
+  
+  useEffect(() => {
+    const filteredTransactions = filterTransactions(transactions, filterCurrentValue, startDate, endDate, setModalVisible);
+    const sortedTransactions = sortTransactions(filteredTransactions, sortCurrentValue);
+    setFilteredTransactions(sortedTransactions);
+  }, [transactions, filterCurrentValue, sortCurrentValue, startDate, endDate, setModalVisible]);
+  
   
   function formatTransactions(transactions, searchQuery) {
     return transactions
@@ -151,11 +162,6 @@ const TransactionsScreen = () => {
         date: new Date(transaction.start_time),
       }));
   }
-
-  useEffect(() => {
-    const filteredAndSortedTransactions = filterAndSortTransactions(transactions, filterCurrentValue, sortCurrentValue, startDate, endDate);
-    setFilteredTransactions(filteredAndSortedTransactions);
-  }, [transactions, filterCurrentValue, sortCurrentValue, startDate, endDate]);
   
   const formattedTransactions = formatTransactions(filteredTransactions, searchQuery);
 
