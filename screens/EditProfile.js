@@ -72,7 +72,6 @@ const EditProfile = () => {
       // Update the user's profile picture URL in Firestore
       const userRef = firebase.firestore().collection('operators').doc(currentUser.uid);
       await userRef.update({ profile_picture: photoUrl });
-
       // Update the local state to trigger a re-render
     }
   
@@ -112,7 +111,7 @@ const EditProfile = () => {
       }
   
       setSelectedImage(result.assets[0].uri);
-      setProfilePicture(photoUrl);
+      setProfilePicture(result.assets[0].uri);
     } catch (error) {
       // Handle the error
       console.log(error);
