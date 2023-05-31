@@ -32,7 +32,8 @@ export default function AddTransaction({ userId }){
       if(snapshot.exists){
         const data = snapshot.data().vehicles;
         setUserName(snapshot.get('name'))
-        setProfilePicture(snapshot.get('profile_picture'));
+        const profilePicture = snapshot.get('profile_picture');
+        setProfilePicture(profilePicture ? profilePicture : null);
         setNumber(snapshot.get('number'));
         if (data != undefined) {
           const car = data.find((v) => v.isDefault) 
