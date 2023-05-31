@@ -88,6 +88,7 @@ const CustomerScreen = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item}
       />
+      <View style={{ marginVertical: 50 }}></View>
     </View>
   )
 }

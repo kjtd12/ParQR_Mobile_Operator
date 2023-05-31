@@ -125,16 +125,24 @@ const TransactionsScreen = () => {
   
     switch (sortCurrentValue) {
       case 'ascending':
-        sortedTransactions.sort((a, b) => a.user_name.localeCompare(b.user_name));
+        sortedTransactions.sort((a, b) =>
+          a.user_name.localeCompare(b.user_name)
+        );
         break;
       case 'descending':
-        sortedTransactions.sort((a, b) => b.user_name.localeCompare(a.user_name));
+        sortedTransactions.sort((a, b) =>
+          b.user_name.localeCompare(a.user_name)
+        );
         break;
       case 'newest':
-        sortedTransactions.sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
+        sortedTransactions.sort((a, b) => {
+          const dateA = a.top_up ? a.formattedDate : new Date(a.start_time).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+          const dateB = b.top_up ? b.formattedDate : new Date(b.start_time).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+          return dateB - dateA;
+        });
         break;
       case 'oldest':
-        sortedTransactions.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+        sortedTransactions.reverse();
         break;
       default:
         break;
@@ -142,6 +150,7 @@ const TransactionsScreen = () => {
   
     return sortedTransactions;
   }
+  
   
   useEffect(() => {
     const isCustomFilter = filterCurrentValue === 'custom';
@@ -359,6 +368,7 @@ const TransactionsScreen = () => {
         keyExtractor={(item) => item.key}
         style={styles.transactionsList}
       />
+      <View style={{ marginVertical: 50 }}></View>
     </View>
   );
 };
