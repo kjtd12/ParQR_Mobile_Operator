@@ -522,7 +522,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           <Text style={{ padding: 10, color: '#213A5C', fontSize: 16 }}>{userName}</Text>
         </View>
         <View style={{ flexDirection: 'row' ,justifyContent: 'center' }}>
-          <Text style={{ fontSize: 24, color: '#213A5C' }}>Recieved Payment? </Text>
+          <Text style={{ fontSize: 24, color: '#213A5C' }}>Received Payment? </Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5 }}>
           <Text style={{ padding: 10 }}>Total Bill:</Text>
@@ -534,8 +534,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           </TouchableOpacity>
         </View>
         <View style={{ padding: 20, alignItems: 'center', width: "100%" }}>
-            <Text style={{ color: 'lightgray' }}>Click the button to verify the customer's</Text>
-            <Text style={{ color: 'lightgray' }}>payment</Text>
+            <Text style={{ color: 'lightgray' }}>Click the button to verify the customer's payment</Text>
         </View>
       </View>
       )}
