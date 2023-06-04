@@ -15,7 +15,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
     const endTime = useMemo(() => endTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }), [endTimeDate]);
 
     const parsedPayment = useMemo(() => parseInt(payment), [payment]);
-    const formattedPrice = useMemo(() => (parsedPayment ? parsedPayment.toFixed(2) : 'N/A'), [parsedPayment]);
+    const formattedPrice = useMemo(() => (parsedPayment ? parsedPayment.toFixed(2) : '0'), [parsedPayment]);
 
     const durationInSeconds = useMemo(() => (endTimeDate - startTimeDate) / 1000, [endTimeDate, startTimeDate]);
     const durationInMinutes = useMemo(() => durationInSeconds / 60, [durationInSeconds]);
