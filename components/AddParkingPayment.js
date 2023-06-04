@@ -129,7 +129,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            additionalHoursWithCostFree = Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours);
+            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours), 0);
 
             if (additionalHoursWithCostFree > 0) {
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
@@ -340,7 +340,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            additionalHoursWithCostFree = Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours);
+            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours), 0);
 
             if (additionalHoursWithCostFree > 0) {
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
