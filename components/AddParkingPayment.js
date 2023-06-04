@@ -355,19 +355,18 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
             const discountSettings = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
 
-            if (discountSettings && discountSettings.discount_by === 'Percentage') {
-              const discountPercentage = parseFloat(discountSettings.amount) / 100;
-              let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
-              discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
-              paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
-            } else if (discountSettings && discountSettings.discount_by === 'Deduct') {
-              const discountAmount = parseFloat(discountSettings.amount);
-              let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
-              discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
-              paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
-            } else {
-              // Handle the scenario when discountData is not available (e.g., set paymentAmount to 0 or display an error message)
-              paymentAmount = 0; // Set paymentAmount to 0 as there is no applicable discount
+            if (discountSettings) {
+              if (discountSettings.discount_by === 'Percentage') {
+                const discountPercentage = parseFloat(discountSettings.amount) / 100;
+                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
+                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
+                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+              } else if (discountSettings.discount_by === 'Deduct') {
+                const discountAmount = parseFloat(discountSettings.amount);
+                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
+                discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
+                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+              }
             }
           });
 
