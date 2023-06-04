@@ -332,7 +332,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
           const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
           const discountSnapshot = await discountRef.once('value');
-          const discountData = discountSnapshot.val();
+          const discountType = discountSnapshot.val();
 
           duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
       
