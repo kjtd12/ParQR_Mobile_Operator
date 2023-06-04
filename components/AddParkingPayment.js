@@ -122,14 +122,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const discountType = discountSnapshot.val();
       
           const durationInHours = Math.floor(duration / (60 * 60));
-          const additionalHours = durationInHours - parseInt(initialHours);
+          let additionalHoursWithCostFree;
 
           let paymentAmount = parseInt(initialPayment);
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
+            additionalHoursWithCostFree = Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours);
 
             if (additionalHoursWithCostFree > 0) {
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
@@ -333,20 +333,20 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
       
           const durationInHours = Math.floor(duration / (60 * 60));
-          const additionalHours = durationInHours - parseInt(initialHours);
-    
+          let additionalHoursWithCostFree;
+
           let paymentAmount = parseInt(initialPayment);
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
+            additionalHoursWithCostFree = Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours);
 
             if (additionalHoursWithCostFree > 0) {
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
 
-            const discountSettings = parkingSettingsData[discountType]; 
+            const discountSettings = parkingSettingsData[discountType];
 
             if (discountSettings) {
               if (discountSettings.discount_by === 'Percentage') {
