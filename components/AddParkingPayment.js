@@ -151,7 +151,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               }
             }
           });
-
           
           await userRef.update({
             paymentStatus: true,
