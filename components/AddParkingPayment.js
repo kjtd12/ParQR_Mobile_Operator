@@ -174,7 +174,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             duration: duration,
             payment: paymentAmount,
             reference_number: referenceNumber,
-            discount: discountData
+            discount: discountType
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
@@ -193,7 +193,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
 
             await generalTransactionsRef.push({
@@ -207,7 +207,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
 
           } else {
@@ -223,7 +223,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
 
             await generalTransactionsRef.push({
@@ -238,7 +238,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
           }
       
@@ -406,7 +406,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             duration: duration,
             payment: paymentAmount,
             reference_number: referenceNumber,
-            discount: discountData
+            discount: discountType
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
@@ -425,7 +425,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
 
             await generalTransactionsRef.push({
@@ -439,7 +439,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
 
           } else {
@@ -455,7 +455,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
 
             await generalTransactionsRef.push({
@@ -470,7 +470,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountData
+              discount: discountType
             });
           }
     
