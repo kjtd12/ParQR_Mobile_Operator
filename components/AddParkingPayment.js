@@ -357,7 +357,11 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             console.log("Hours_1: " + additionalHoursWithCostFree);
 
             if (additionalHoursWithCostFree == 0) {
-              paymentAmount = parseInt(0);
+              if (discountSettings.costfree_amount == 0) {
+                if (duration == 0) {
+                  paymentAmount = parseInt(0);
+                }
+              }
             }
 
             if (additionalHoursWithCostFree > 0) {
