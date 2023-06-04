@@ -379,6 +379,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 paymentAmount = Math.max(discountablePaymentAmount, 0);
               }
             }
+            console.log('Amount_1:' + paymentAmount);
           });
 
           setPayment(paymentAmount);
