@@ -119,24 +119,41 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const parkingRef = firebase.database().ref(`users/${userId}`);
           const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
           const parkingTimeData = parkingTimeSnapshot.val();
-      
-          const durationInHours = Math.floor(duration / (60 * 60));
-          const additionalHours = durationInHours - parseInt(initialHours);
-      
-          let paymentAmount = parseInt(initialPayment);
-      
-          if (additionalHours > 0) {
-            paymentAmount += additionalHours * parseInt(incrementalPayment);
-          }
 
           const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
           const discountSnapshot = await discountRef.once('value');
-          const discountData = discountSnapshot.val();
+          const discountType = discountSnapshot.val();
+      
+          const durationInHours = Math.floor(duration / (60 * 60));
+          const additionalHours = durationInHours - parseInt(initialHours);
 
-          if (discountData !== 'none') {
-            const discount = 0.2; // 20% discount
-            paymentAmount -= paymentAmount * discount;
+          let paymentAmount = parseInt(initialPayment);
+          let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
+
+          if (additionalHoursWithCostFree > 0) {
+            paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
           }
+
+          await paymentSettingsRef.once('value', (snapshot) => {
+            const parkingSettingsData = snapshot.val();
+            // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+
+            const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
+
+            if (discountData) {
+              if (discountData.discount_by === 'Percentage') {
+                const discountPercentage = parseFloat(discountData.amount) / 100;
+                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
+                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
+                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+              } else if (discountData.discount_by === 'Direct Deduction') {
+                const discountAmount = parseFloat(discountData.amount);
+                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
+                discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
+                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+              }
+            }
+          });
           
           await userRef.update({
             paymentStatus: true,
@@ -312,30 +329,43 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const parkingTimeSnapshot = await parkingRef.child('parking_time').once('value');
           const parkingTimeData = parkingTimeSnapshot.val();
 
+          const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
+          const discountSnapshot = await discountRef.once('value');
+          const discountData = discountSnapshot.val();
+
           duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
       
           const durationInHours = Math.floor(duration / (60 * 60));
           const additionalHours = durationInHours - parseInt(initialHours);
     
-
-          console.log(duration);
-          
-    
           let paymentAmount = parseInt(initialPayment);
-      
-          if (additionalHours > 0) {
-            paymentAmount += additionalHours * parseInt(incrementalPayment);
+          let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
+
+          if (additionalHoursWithCostFree > 0) {
+            paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
           }
-    
-          const discountRef = firebase.database().ref('activeCustomer/' + userId + '/discount');
-          const discountSnapshot = await discountRef.once('value');
-          const discountData = discountSnapshot.val();
-    
-          if (discountData !== 'none') {
-            const discount = 0.2; // 20% discount
-            paymentAmount -= paymentAmount * discount;
-          }
-          
+
+          await paymentSettingsRef.once('value', (snapshot) => {
+            const parkingSettingsData = snapshot.val();
+            // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+
+            const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
+
+            if (discountData) {
+              if (discountData.discount_by === 'Percentage') {
+                const discountPercentage = parseFloat(discountData.amount) / 100;
+                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
+                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
+                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+              } else if (discountData.discount_by === 'Direct Deduction') {
+                const discountAmount = parseFloat(discountData.amount);
+                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
+                discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
+                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+              }
+            }
+          });
+
           setPayment(paymentAmount);
     
           if (e_wallet < paymentAmount) {
@@ -577,7 +607,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
         <View>
           <View style={{ alignItems: 'center' }}>
             <Text style={{ paddingBottom: 10, color: '#213A5C', fontSize: 32 }}>User Not parked yet.</Text>
-            <Text style={{ paddingBottom: 10, color: '#213A5C' }}>Press the Proceed bellow to scan again.</Text>
+            <Text style={{ paddingBottom: 10, color: '#213A5C' }}>Press the Proceed below to scan again.</Text>
             <View style={{ alignItems: 'center' }}>
             </View>
           </View>
