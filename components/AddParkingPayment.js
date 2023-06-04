@@ -128,7 +128,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
-            // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
 
             let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
 
@@ -136,19 +135,19 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
 
-            const discountSettings = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
+            const discountSettings = parkingSettingsData[discountType];
 
             if (discountSettings) {
               if (discountSettings.discount_by === 'Percentage') {
                 const discountPercentage = parseFloat(discountSettings.amount) / 100;
-                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
-                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
-                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+                let discountablePaymentAmount = paymentAmount;
+                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
+                paymentAmount = Math.max(discountablePaymentAmount, 0);
               } else if (discountSettings.discount_by === 'Deduct') {
                 const discountAmount = parseFloat(discountSettings.amount);
-                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
-                discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
-                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+                let discountablePaymentAmount = paymentAmount;
+                discountablePaymentAmount -= discountAmount;
+                paymentAmount = Math.max(discountablePaymentAmount, 0);
               }
             }
           });
@@ -341,7 +340,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
-            // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
 
             let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
 
@@ -349,19 +347,19 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
 
-            const discountSettings = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
+            const discountSettings = parkingSettingsData[discountType]; 
 
             if (discountSettings) {
               if (discountSettings.discount_by === 'Percentage') {
                 const discountPercentage = parseFloat(discountSettings.amount) / 100;
-                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
-                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
-                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+                let discountablePaymentAmount = paymentAmount;
+                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
+                paymentAmount = Math.max(discountablePaymentAmount, 0);
               } else if (discountSettings.discount_by === 'Deduct') {
                 const discountAmount = parseFloat(discountSettings.amount);
-                let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
-                discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
-                paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
+                let discountablePaymentAmount = paymentAmount;
+                discountablePaymentAmount -= discountAmount;
+                paymentAmount = Math.max(discountablePaymentAmount, 0);
               }
             }
           });
