@@ -139,15 +139,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
 
-            const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
+            const discountSettings = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
 
-            if (discountData && discountData.discount_by === 'Percentage') {
-              const discountPercentage = parseFloat(discountData.amount) / 100;
+            if (discountSettings && discountSettings.discount_by === 'Percentage') {
+              const discountPercentage = parseFloat(discountSettings.amount) / 100;
               let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
               discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
               paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
-            } else if (discountData && discountData.discount_by === 'Deduct') {
-              const discountAmount = parseFloat(discountData.amount);
+            } else if (discountSettings && discountSettings.discount_by === 'Deduct') {
+              const discountAmount = parseFloat(discountSettings.amount);
               let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
               discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
               paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
@@ -353,15 +353,15 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
 
-            const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
+            const discountSettings = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
 
-            if (discountData && discountData.discount_by === 'Percentage') {
-              const discountPercentage = parseFloat(discountData.amount) / 100;
+            if (discountSettings && discountSettings.discount_by === 'Percentage') {
+              const discountPercentage = parseFloat(discountSettings.amount) / 100;
               let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
               discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
               paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
-            } else if (discountData && discountData.discount_by === 'Deduct') {
-              const discountAmount = parseFloat(discountData.amount);
+            } else if (discountSettings && discountSettings.discount_by === 'Deduct') {
+              const discountAmount = parseFloat(discountSettings.amount);
               let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
               discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
               paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
@@ -370,8 +370,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               paymentAmount = 0; // Set paymentAmount to 0 as there is no applicable discount
             }
           });
-
-
 
           setPayment(paymentAmount);
     
