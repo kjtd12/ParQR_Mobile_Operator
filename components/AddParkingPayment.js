@@ -131,34 +131,39 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
             const discountSettings = parkingSettingsData[discountType];
 
-            console.log('Discount', discountSettings);
+            console.log('Discount: ', discountSettings);
 
             additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
-            console.log("Hours:" + additionalHoursWithCostFree);
+            console.log("Hours: " + additionalHoursWithCostFree);
 
             if (additionalHoursWithCostFree == 0) {
-              paymentAmount = 0;
+              if (discountSettings.costfree_amount == 0) {
+                if (duration == 0) {
+                  paymentAmount = parseInt(0);
+                }
+              }
             }
 
             if (additionalHoursWithCostFree > 0) {
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
 
-            console.log('Amount: ' + paymentAmount);
+            console.log('Amount:' + paymentAmount);
 
             if (discountSettings) {
               if (discountSettings.discount_by === 'Percentage') {
                 const discountPercentage = parseFloat(discountSettings.amount) / 100;
                 let discountablePaymentAmount = paymentAmount;
                 discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
-                paymentAmount = Math.max(discountablePaymentAmount, 0);
+                paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
               } else if (discountSettings.discount_by === 'Deduct') {
                 const discountAmount = parseFloat(discountSettings.amount);
                 let discountablePaymentAmount = paymentAmount;
                 discountablePaymentAmount -= discountAmount;
-                paymentAmount = Math.max(discountablePaymentAmount, 0);
+                paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
               }
             }
+            console.log('Amount:' + paymentAmount);
           });
           
           await userRef.update({
