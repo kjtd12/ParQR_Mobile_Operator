@@ -74,7 +74,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
                         <View>
                             <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Transaction Type</Text>
-                                <Text style={styles.secondText}>{item.user_name ? 'Top-up' : 'Parking'}</Text>
+                                <Text style={styles.secondText}>{item.top_up ? 'Top-up' : 'Parking'}</Text>
                             </View>
                             <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Customers's Name</Text>
