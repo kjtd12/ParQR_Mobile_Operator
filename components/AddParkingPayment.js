@@ -141,7 +141,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
             const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
 
-            console.log(discountType)
+            console.log(discountType);
 
             if (discountData) {
               if (discountData.discount_by === 'Percentage') {
@@ -355,7 +355,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
             const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
 
-            console.log(discountType)
+            console.log(discountData);
 
             if (discountData) {
               if (discountData.discount_by === 'Percentage') {
