@@ -25,10 +25,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
       setDuration((new Date().getTime() - snapshot.val())/1000);
     });
 
-    console.log(duration);
-
     handleDelayedAddPayment();
-    console.log(duration);
   
     return () => {
       parkingRef.off();
