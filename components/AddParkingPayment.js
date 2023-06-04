@@ -129,9 +129,11 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            console.log('ParkingSettingsData', parkingSettingsData);
+            const discountSettings = parkingSettingsData[discountType];
 
-            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours), 0);
+            console.log('Discount', discountSettings);
+
+            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
             console.log("Hours:" + additionalHoursWithCostFree);
 
             if (additionalHoursWithCostFree == 0) {
@@ -141,8 +143,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             if (additionalHoursWithCostFree > 0) {
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
-
-            const discountSettings = parkingSettingsData[discountType];
 
             if (discountSettings) {
               if (discountSettings.discount_by === 'Percentage') {
@@ -347,10 +347,11 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            console.log('ParkingSettingsData', parkingSettingsData);
+            const discountSettings = parkingSettingsData[discountType];
 
-            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours), 0);
+            console.log('Discount', discountSettings);
 
+            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
             console.log("Hours:" + additionalHoursWithCostFree);
 
             if (additionalHoursWithCostFree == 0) {
@@ -360,8 +361,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             if (additionalHoursWithCostFree > 0) {
               paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
             }
-
-            const discountSettings = parkingSettingsData[discountType];
 
             if (discountSettings) {
               if (discountSettings.discount_by === 'Percentage') {
