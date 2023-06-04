@@ -19,28 +19,35 @@ const LoginScreen = () => {
     //Check if the accoutn is an operator
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
-            if (user) {
-                setLoading(true)
-                usersCollection.doc(user.uid).get()
-                .then(doc => {
-                    setLoading(false)
-                    if (doc.exists) {
-                        setUser(user)
-                        navigation.replace("App")
-                    } else {
-                        auth.signOut()
-                        alert('Operator does not exist')
-                    }
-                })
-                .catch(error => {
-                    setLoading(false)
-                    alert(error.message)
-                })
-            }
-        })
-
-        return unsubscribe
-    }, [])
+          if (user) {
+            setLoading(true);
+            usersCollection.doc(user.uid).get()
+              .then(doc => {
+                setLoading(false);
+                if (doc.exists) {
+                  const userData = doc.data();
+                  if (userData.archive && userData.archive === true) {
+                    auth.signOut();
+                    alert('Operator is archived. Please contact support for assistance.');
+                  } else {
+                    setUser(user);
+                    navigation.replace("App");
+                  }
+                } else {
+                  auth.signOut();
+                  alert('Operator does not exist');
+                }
+              })
+              .catch(error => {
+                setLoading(false);
+                alert(error.message);
+              });
+          }
+        });
+      
+        return unsubscribe;
+      }, []);
+      
 
     //Forget Passwrod function
     const forgetPassword = () => {
