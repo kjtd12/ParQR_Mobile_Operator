@@ -362,7 +362,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
                 discountablePaymentAmount -= discountablePaymentAmount * discountPercentage; // Apply the discount to the payment amount
                 paymentAmount = Math.max(discountablePaymentAmount, 0); // Ensure the paymentAmount is not negative
-              } else if (discountData.discount_by === 'Direct Deduction') {
+              } else if (discountData.discount_by === 'Deduct') {
                 const discountAmount = parseFloat(discountData.amount);
                 let discountablePaymentAmount = paymentAmount; // Use the updated paymentAmount
                 discountablePaymentAmount -= discountAmount; // Apply the direct deduction to the payment amount
