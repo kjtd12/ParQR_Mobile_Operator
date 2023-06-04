@@ -122,6 +122,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const discountType = discountSnapshot.val();
       
           const durationInHours = Math.floor(duration / (60 * 60));
+          const durationInMinutes = Math.floor((duration % 3600) / 60);
           let additionalHoursWithCostFree;
 
           let paymentAmount = parseInt(initialPayment);
@@ -136,14 +137,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
             console.log("Hours: " + additionalHoursWithCostFree);
 
-            if (additionalHoursWithCostFree == 0) {
-              if (discountSettings.costfree_amount == 0) {
-                if (duration == 0) {
-                  paymentAmount = parseInt(0);
-                }
-              } else {
-                paymentAmount = parseInt(0);
-              }
+            if (durationInHours == discountSettings.costfree_amount) {
+              paymentAmount = parseInt(0);
+            }
+
+            if (durationInHours < discountSettings.costfree_amount) {
+              paymentAmount = 0;
+            } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
+              paymentAmount = 30;
             }
 
             if (additionalHoursWithCostFree > 0) {
@@ -349,6 +350,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
       
           const durationInHours = Math.floor(duration / (60 * 60));
+          const durationInMinutes = Math.floor((duration % 3600) / 60);
           let additionalHoursWithCostFree;
 
           let paymentAmount = parseInt(initialPayment);
@@ -363,14 +365,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
             console.log("Hours_1: " + additionalHoursWithCostFree);
 
-            if (additionalHoursWithCostFree == 0) {
-              if (discountSettings.costfree_amount == 0) {
-                if (duration == 0) {
-                  paymentAmount = parseInt(0);
-                }
-              } else {
-                paymentAmount = parseInt(0);
-              }
+            if (durationInHours == discountSettings.costfree_amount) {
+              paymentAmount = parseInt(0);
+            }
+
+            if (durationInHours < discountSettings.costfree_amount) {
+              paymentAmount = 0;
+            } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
+              paymentAmount = 30;
             }
 
             if (additionalHoursWithCostFree > 0) {
