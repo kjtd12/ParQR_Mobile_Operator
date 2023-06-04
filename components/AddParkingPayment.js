@@ -130,6 +130,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             const parkingSettingsData = snapshot.val();
 
             additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours), 0);
+            console.log(additionalHoursWithCostFree);
 
             if (additionalHoursWithCostFree == 0) {
               paymentAmount = 0;
@@ -345,6 +346,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             const parkingSettingsData = snapshot.val();
 
             additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(parkingSettingsData.costfree_amount), 0) - parseInt(initialHours), 0);
+
+            console.log(additionalHoursWithCostFree);
 
             if (additionalHoursWithCostFree == 0) {
               paymentAmount = 0;
