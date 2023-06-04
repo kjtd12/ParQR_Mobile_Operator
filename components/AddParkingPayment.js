@@ -141,6 +141,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 if (duration == 0) {
                   paymentAmount = parseInt(0);
                 }
+              } else {
+                paymentAmount = parseInt(0);
               }
             }
 
@@ -366,6 +368,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 if (duration == 0) {
                   paymentAmount = parseInt(0);
                 }
+              } else {
+                paymentAmount = parseInt(0);
               }
             }
 
