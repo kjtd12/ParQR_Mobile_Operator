@@ -73,7 +73,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
                         <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Transaction Details</Text>
                         <View>
                             <View style={styles.detailLine}>
-                                <Text style={styles.firstText}>Transaction</Text>
+                                <Text style={styles.firstText}>Transaction Type</Text>
                                 <Text style={styles.secondText}>{item.user_name ? 'Top-up' : 'Parking'}</Text>
                             </View>
                             <View style={styles.detailLine}>
@@ -101,7 +101,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
                                 <Text style={styles.secondText}>{durationText}</Text>
                             </View>
                             <View style={styles.detailLine}>
-                                <Text style={styles.firstText}>discount</Text>
+                                <Text style={styles.firstText}>Discounts</Text>
                                 <Text style={styles.secondText}>{item.discount}</Text>
                             </View>
                             <View style={styles.detailLine}>
