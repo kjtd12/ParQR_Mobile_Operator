@@ -406,6 +406,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           await userRef.update({
             e_wallet: e_wallet - paymentAmount,
           });  
+
+          console.log('Amount_1:' + paymentAmount);
     
           const referenceNumber = '800' + generateReferenceNumber();
       
