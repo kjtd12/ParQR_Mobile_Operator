@@ -128,15 +128,16 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const additionalHours = durationInHours - parseInt(initialHours);
 
           let paymentAmount = parseInt(initialPayment);
-          let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
-
-          if (additionalHoursWithCostFree > 0) {
-            paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
-          }
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
             // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+
+            let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
+
+            if (additionalHoursWithCostFree > 0) {
+              paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
+            }
 
             const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
 
@@ -339,15 +340,16 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const additionalHours = durationInHours - parseInt(initialHours);
     
           let paymentAmount = parseInt(initialPayment);
-          let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
-
-          if (additionalHoursWithCostFree > 0) {
-            paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
-          }
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
             // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
+
+            let additionalHoursWithCostFree = Math.max(additionalHours - parseInt(parkingSettingsData.costfree_amount), 0);
+
+            if (additionalHoursWithCostFree > 0) {
+              paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
+            }
 
             const discountData = parkingSettingsData[discountType]; // Replace 'discountType' with the appropriate key for the discount type you want to apply (e.g., 'pwd', 'senior_citizen', 'student')
 
