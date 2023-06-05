@@ -130,43 +130,45 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            const discountSettings = parkingSettingsData[discountType];
+            if (discountType !== "none") {
+              const discountSettings = parkingSettingsData[discountType];
 
-            console.log('Discount: ', discountSettings);
-
-            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
-            console.log("Hours: " + additionalHoursWithCostFree);
-
-            if (durationInHours == discountSettings.costfree_amount) {
-              paymentAmount = parseInt(0);
-            }
-
-            if (durationInHours < discountSettings.costfree_amount) {
-              paymentAmount = 0;
-            } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
-              paymentAmount = 30;
-            }
-
-            if (additionalHoursWithCostFree > 0) {
-              paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
-            }
-
-            console.log('Amount:' + paymentAmount);
-
-            if (discountSettings) {
-              if (discountSettings.discount_by === 'Percentage') {
-                const discountPercentage = parseFloat(discountSettings.amount) / 100;
-                let discountablePaymentAmount = paymentAmount;
-                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
-                paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
-              } else if (discountSettings.discount_by === 'Deduct') {
-                const discountAmount = parseFloat(discountSettings.amount);
-                let discountablePaymentAmount = paymentAmount;
-                discountablePaymentAmount -= discountAmount;
-                paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+              console.log('Discount: ', discountSettings);
+  
+              additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
+              console.log("Hours: " + additionalHoursWithCostFree);
+  
+              if (durationInHours == discountSettings.costfree_amount) {
+                paymentAmount = parseInt(0);
               }
+  
+              if (durationInHours < discountSettings.costfree_amount) {
+                paymentAmount = 0;
+              } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
+                paymentAmount = 30;
+              }
+  
+              if (additionalHoursWithCostFree > 0) {
+                paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
+              }
+  
+              console.log('Amount:' + paymentAmount);
+  
+              if (discountSettings) {
+                if (discountSettings.discount_by === 'Percentage') {
+                  const discountPercentage = parseFloat(discountSettings.amount) / 100;
+                  let discountablePaymentAmount = paymentAmount;
+                  discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
+                  paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+                } else if (discountSettings.discount_by === 'Deduct') {
+                  const discountAmount = parseFloat(discountSettings.amount);
+                  let discountablePaymentAmount = paymentAmount;
+                  discountablePaymentAmount -= discountAmount;
+                  paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+                }
+              }
+              console.log('Amount:' + paymentAmount);
             }
-            console.log('Amount:' + paymentAmount);
           });
           
           await userRef.update({
@@ -358,43 +360,45 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
 
-            const discountSettings = parkingSettingsData[discountType];
+            if (discountType !== "none") {
+              const discountSettings = parkingSettingsData[discountType];
 
-            console.log('Discount_1: ', discountSettings);
-
-            additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
-            console.log("Hours_1: " + additionalHoursWithCostFree);
-
-            if (durationInHours == discountSettings.costfree_amount) {
-              paymentAmount = parseInt(0);
-            }
-
-            if (durationInHours < discountSettings.costfree_amount) {
-              paymentAmount = 0;
-            } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
-              paymentAmount = 30;
-            }
-
-            if (additionalHoursWithCostFree > 0) {
-              paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
-            }
-
-            console.log('Amount_1:' + paymentAmount);
-
-            if (discountSettings) {
-              if (discountSettings.discount_by === 'Percentage') {
-                const discountPercentage = parseFloat(discountSettings.amount) / 100;
-                let discountablePaymentAmount = paymentAmount;
-                discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
-                paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
-              } else if (discountSettings.discount_by === 'Deduct') {
-                const discountAmount = parseFloat(discountSettings.amount);
-                let discountablePaymentAmount = paymentAmount;
-                discountablePaymentAmount -= discountAmount;
-                paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+              console.log('Discount: ', discountSettings);
+  
+              additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
+              console.log("Hours: " + additionalHoursWithCostFree);
+  
+              if (durationInHours == discountSettings.costfree_amount) {
+                paymentAmount = parseInt(0);
               }
+  
+              if (durationInHours < discountSettings.costfree_amount) {
+                paymentAmount = 0;
+              } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
+                paymentAmount = 30;
+              }
+  
+              if (additionalHoursWithCostFree > 0) {
+                paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
+              }
+  
+              console.log('Amount:' + paymentAmount);
+  
+              if (discountSettings) {
+                if (discountSettings.discount_by === 'Percentage') {
+                  const discountPercentage = parseFloat(discountSettings.amount) / 100;
+                  let discountablePaymentAmount = paymentAmount;
+                  discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
+                  paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+                } else if (discountSettings.discount_by === 'Deduct') {
+                  const discountAmount = parseFloat(discountSettings.amount);
+                  let discountablePaymentAmount = paymentAmount;
+                  discountablePaymentAmount -= discountAmount;
+                  paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+                }
+              }
+              console.log('Amount:' + paymentAmount);
             }
-            console.log('Amount_1:' + paymentAmount);
           });
 
           setPayment(paymentAmount);
