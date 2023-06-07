@@ -71,6 +71,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
     try {
       const customerRef = firebase.database().ref('activeCustomer/' + userId);
       const customerSnapshot = await customerRef.once('value');
+      const customerVal = customerSnapshot.val();
       const exists = customerSnapshot.exists();
 
       if (!exists) {
@@ -126,6 +127,11 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           let additionalHoursWithCostFree;
 
           let paymentAmount = parseInt(initialPayment);
+
+          if (customerVal.vehicle_type == "motorcycle") {
+            const deduction = paymentAmount * 0.2;
+            paymentAmount = paymentAmount - deduction;
+          }
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
@@ -191,7 +197,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             duration: duration,
             payment: paymentAmount,
             reference_number: referenceNumber,
-            discount: discountType
+            discount: discountType,
+            e_wallet: false,
+            vehicle_type: customerVal.vehicle_type
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
@@ -210,7 +218,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: false,
+              vehicle_type: customerVal.vehicle_type
             });
 
             await generalTransactionsRef.push({
@@ -224,7 +234,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: false,
+              vehicle_type: customerVal.vehicle_type
             });
 
           } else {
@@ -240,7 +252,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: false,
+              vehicle_type: customerVal.vehicle_type
             });
 
             await generalTransactionsRef.push({
@@ -255,7 +269,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: false,
+              vehicle_type: customerVal.vehicle_type
             });
           }
       
@@ -303,6 +319,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
     try {
       const customerRef = firebase.database().ref('activeCustomer/' + userId);
       const customerSnapshot = await customerRef.once('value');
+      const customerVal = customerSnapshot.val();
       const exists = customerSnapshot.exists();
 
       if (!exists) {
@@ -360,6 +377,11 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           let additionalHoursWithCostFree;
 
           let paymentAmount = parseInt(initialPayment);
+
+          if (customerVal.vehicle_type == "motorcycle") {
+            const deduction = paymentAmount * 0.2;
+            paymentAmount = paymentAmount - deduction;
+          }
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingSettingsData = snapshot.val();
@@ -445,7 +467,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
             duration: duration,
             payment: paymentAmount,
             reference_number: referenceNumber,
-            discount: discountType
+            discount: discountType,
+            e_wallet: true,
+            vehicle_type: customerVal.vehicle_type
           });
       
           const operatorTransactionsRef = firebase.database().ref(`operators/${operatorUid}/transactions`);
@@ -464,7 +488,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: true,
+              vehicle_type: customerVal.vehicle_type
             });
 
             await generalTransactionsRef.push({
@@ -478,7 +504,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: true,
+              vehicle_type: customerVal.vehicle_type
             });
 
           } else {
@@ -494,7 +522,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: true,
+              vehicle_type: customerVal.vehicle_type
             });
 
             await generalTransactionsRef.push({
@@ -509,7 +539,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               reference_number: referenceNumber,
               date: date,
               top_up: false,
-              discount: discountType
+              discount: discountType,
+              e_wallet: true,
+              vehicle_type: customerVal.vehicle_type
             });
           }
     

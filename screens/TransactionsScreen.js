@@ -205,7 +205,7 @@ const TransactionsScreen = () => {
   }, [firebase.auth().currentUser.uid]);
   
   const renderTransactionItem = ({ item }) => {
-    const formattedPayment = item.payment ? `₱${parseFloat(item.payment).toFixed(2)}` : 'N/A';
+    const formattedPayment = item.payment ? `₱${parseFloat(item.payment).toFixed(2)}` : '₱0.00';
     let formattedDate;
     let formattedTime;
 

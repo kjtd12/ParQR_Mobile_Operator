@@ -8,14 +8,16 @@ const auth = firebase.auth()
 
 export default function AddParkingTime({ userId }){
   const [startTime, setStartTime] = useState(new Date());
-  const [discount, setDiscount] = useState('none');
   const [userName, setUserName] = useState('');
   const [carPlate, setCarPlate] = useState('');
+  const [discount, setDiscount] = useState('none');
+  const [vehicleType, setVehicleType] = useState('car');
   const [contactNumber, setContactNumber] = useState('');
   const [configVisible, setConfigVisibile] = useState(true);
   const [detailVisible, setDetailVisible] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
   const [discountIsOpen, setDiscountIsOpen] = useState(false);
+  const [vehicleTypeOpen, setVehicleTypeOpen] = useState(false);
 
   useEffect(() => {
     firebase.firestore().collection('users')
@@ -67,7 +69,8 @@ export default function AddParkingTime({ userId }){
               check_in_time: Date.now(), 
               contact_number: contactNumber, 
               discount: discount,
-              plate: carPlate
+              plate: carPlate,
+              vehicle_type: vehicleType
           });
         }
       }
@@ -95,7 +98,7 @@ export default function AddParkingTime({ userId }){
             <Text>{startTime.toLocaleString([], { hour: 'numeric', minute: '2-digit' })}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ position: "relative", zIndex: 10 }}>
+        <View style={{ position: "relative", zIndex: 15,  marginBottom: 20 }}>
           <DropDownPicker
             items={[ { label: 'PWD', value: 'pwd' }, { label: 'Senior Citizen', value: 'senior_citizen' }, { label: 'Student', value: 'student' }, { label: 'Pregnant', value: 'pregnant' }, { label: 'None', value: 'none' } ]}
             defaultValue={'none'}
@@ -117,6 +120,29 @@ export default function AddParkingTime({ userId }){
             open={discountIsOpen}
             setOpen={setDiscountIsOpen}
           />
+        </View>
+        <View style={{ position: "relative", zIndex: 10 }}>
+          <DropDownPicker
+              items={[ { label: 'Car', value: 'car' }, { label: 'Motorcycle', value: 'motorcycle' } ]}
+              defaultValue={'car'}
+              placeholder="Select Vehicle Type"
+              style={{ backgroundColor: '#fafafa' }}
+              itemStyle={{
+                justifyContent: 'flex-start'
+              }}
+              containerStyle={{ 
+                  backgroundColor: '#213A5C',
+                  borderRadius: 10,
+              }}
+              dropDownStyle={{ // add this to remove the default border of the DropDownPicker dropdown
+                  borderWidth: 0,
+                  color: '#213A5C',
+              }}
+              setValue={(value) => setVehicleType(value)}
+              value={vehicleType}
+              open={vehicleTypeOpen}
+              setOpen={setVehicleTypeOpen}
+            />
         </View>
         <TouchableOpacity onPress={handleAddParkingTime} style={{ backgroundColor: '#F3BB01', padding: 15, borderRadius: 10, marginVertical: 20 }}>
           <Text style={{ color: 'white', textAlign: 'center' }}>Start Parking</Text>

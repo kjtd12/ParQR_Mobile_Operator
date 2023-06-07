@@ -1,32 +1,59 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 const DetailsModal = ({ isVisible, onClose, item, operator }) => {
 
     const { start_time, duration, operator_name, payment, top_up } = item;
-    const startTimeDate = useMemo(() => new Date(start_time), [start_time]);
-    const endTimeDate = useMemo(() => new Date(start_time + duration * 1000), [start_time, duration]);
+    const startTimeDate = new Date(start_time);
+    const endTimeDate = new Date(start_time + duration * 1000);
 
-    const date = useMemo(
-        () => startTimeDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        [startTimeDate]
-    );
-    const startTime = useMemo(() => startTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }), [startTimeDate]);
-    const endTime = useMemo(() => endTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }), [endTimeDate]);
+    const date = startTimeDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const startTime = startTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const endTime = endTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
-    const parsedPayment = useMemo(() => parseInt(payment), [payment]);
-    const formattedPrice = useMemo(() => (parsedPayment ? parsedPayment.toFixed(2) : '0'), [parsedPayment]);
+    const parsedPayment = parseInt(payment);
+    const formattedPrice = parsedPayment ? parsedPayment.toFixed(2) : '0.00';
 
-    const durationInSeconds = useMemo(() => (endTimeDate - startTimeDate) / 1000, [endTimeDate, startTimeDate]);
-    const durationInMinutes = useMemo(() => durationInSeconds / 60, [durationInSeconds]);
-    const durationInHours = useMemo(() => durationInMinutes / 60, [durationInMinutes]);
+    const durationInSeconds = (endTimeDate - startTimeDate) / 1000;
+    const durationInMinutes = Math.floor(durationInSeconds / 60);
+    const durationInHours = Math.floor(durationInMinutes / 60);
 
     let durationText;
     if (durationInHours < 1) {
         const remainingSeconds = Math.round(durationInSeconds % 60);
-        durationText = `0 mins ${remainingSeconds} secs`;
+        const remainingMinutes = Math.round(durationInMinutes % 60);
+        durationText = `${remainingMinutes} mins ${remainingSeconds} secs`;
     } else {
-        durationText = `${Math.floor(durationInHours)} hours ${Math.floor(durationInMinutes % 60)} min`;
+        durationText = `${durationInHours} hours ${durationInMinutes % 60} min`;
+    }
+
+    let discountText;
+    const discountsTable = {
+    "pwd": "Pwd",
+    "none": "None",
+    "student": "Student",
+    "pregnant": "Pregnant",
+    "senior_citizen": "Senior Citizen",
+    };
+
+    for (const key in discountsTable) {
+        if (key === item.discount) {
+            discountText = discountsTable[key];
+            break;
+        }
+    }
+
+    let vehicleText;
+    const vehicleTypeTable = {
+        "car": "Car",
+        "motorcycle": "Motorcycle"
+    }
+
+    for (const key in vehicleTypeTable) {
+        if (key === item.vehicle_type) {
+            vehicleText = vehicleTypeTable[key];
+            break;
+        }
     }
 
     if (top_up) {
@@ -34,7 +61,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
             <Modal visible={isVisible} transparent={true}>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.1)', }}>
                     <View style={{ backgroundColor: '#fff', borderRadius: 10, padding: 20, width: '90%' }}>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Transaction Details</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#213A5C', marginBottom: 20 }}>Transaction Details</Text>
                         <View>
                             <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Transaction Type</Text>
@@ -74,7 +101,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
             <Modal visible={isVisible} transparent={true}>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.1)', }}>
                     <View style={{ backgroundColor: '#fff', borderRadius: 10, padding: 20, width: '90%' }}>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#213A5C' }}>Transaction Details</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#213A5C', marginBottom: 20 }}>Transaction Details</Text>
                         <View>
                             <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Transaction Type</Text>
@@ -87,6 +114,10 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
                             <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Plate No.</Text>
                                 <Text style={styles.secondText}>{item.plate_no}</Text>
+                            </View>
+                            <View style={styles.detailLine}>
+                                <Text style={styles.firstText}>Vehicle Type</Text>
+                                <Text style={styles.secondText}>{vehicleText}</Text>
                             </View>
                             <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Date & Time</Text>
@@ -105,8 +136,12 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
                                 <Text style={styles.secondText}>{durationText}</Text>
                             </View>
                             <View style={styles.detailLine}>
+                                <Text style={styles.firstText}>Mode of Payment</Text>
+                                <Text style={styles.secondText}>{item.e_wallet ? "E-Wallet" : "Cash"}</Text>
+                            </View>
+                            <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Discounts</Text>
-                                <Text style={styles.secondText}>{item.discount}</Text>
+                                <Text style={styles.secondText}>{discountText}</Text>
                             </View>
                             <View style={styles.detailLine}>
                                 <Text style={styles.firstText}>Amount</Text>
