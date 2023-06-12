@@ -29,11 +29,11 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
 
     let discountText;
     const discountsTable = {
-    "pwd": "Pwd",
-    "none": "None",
-    "student": "Student",
-    "pregnant": "Pregnant",
-    "senior_citizen": "Senior Citizen",
+        "pwd": "Pwd",
+        "none": "None",
+        "student": "Student",
+        "pregnant": "Pregnant",
+        "senior_citizen": "Senior Citizen",
     };
 
     for (const key in discountsTable) {
