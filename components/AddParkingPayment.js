@@ -104,13 +104,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           let initialHours;
           let initialPayment;
           let incrementalPayment;
+          let motorcycleDeduct;
 
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingPaymentData = snapshot.val();
             initialHours = parseInt(parkingPaymentData.initial_hours);
             initialPayment = parseInt(parkingPaymentData.initial_payment);
             incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
-
+            motorcycleDeduct = parseInt(parkingPaymentData.motorcycle_deduct)
             // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
           });
       
@@ -129,8 +130,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           let paymentAmount = parseInt(initialPayment);
 
           if (customerVal.vehicle_type == "motorcycle") {
-            const deduction = paymentAmount * 0.2;
-            paymentAmount = paymentAmount - deduction;
+            paymentAmount = paymentAmount - motorcycleDeduct;
           }
 
           await paymentSettingsRef.once('value', (snapshot) => {
@@ -352,13 +352,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           let initialHours;
           let initialPayment;
           let incrementalPayment;
-    
+          let motorcycleDeduct;
+
           await paymentSettingsRef.once('value', (snapshot) => {
             const parkingPaymentData = snapshot.val();
             initialHours = parseInt(parkingPaymentData.initial_hours);
             initialPayment = parseInt(parkingPaymentData.initial_payment);
             incrementalPayment = parseInt(parkingPaymentData.incremental_payment);
-    
+            motorcycleDeduct = parseInt(parkingPaymentData.motorcycle_deduct)
             // Use the updated values of initialHours, initialPayment, and incrementalPayment within this listener if needed
           });
     
@@ -379,8 +380,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           let paymentAmount = parseInt(initialPayment);
 
           if (customerVal.vehicle_type == "motorcycle") {
-            const deduction = paymentAmount * 0.2;
-            paymentAmount = paymentAmount - deduction;
+            paymentAmount = paymentAmount - motorcycleDeduct;
           }
 
           await paymentSettingsRef.once('value', (snapshot) => {
