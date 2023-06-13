@@ -144,7 +144,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
               console.log("Hours: " + additionalHoursWithCostFree);
   
-              if (durationInHours == discountSettings.costfree_amount) {
+              if (durationInMinutes == discountSettings.costfree_amount) {
                 paymentAmount = parseInt(0);
               }
   
@@ -169,6 +169,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 } else if (discountSettings.discount_by === 'Deduct') {
                   const discountAmount = parseFloat(discountSettings.amount);
                   let discountablePaymentAmount = paymentAmount;
+                  console.log(paymentAmount);
+                  console.log(discountablePaymentAmount);
                   discountablePaymentAmount -= discountAmount;
                   paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
                 }
