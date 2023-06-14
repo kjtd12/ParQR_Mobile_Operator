@@ -41,6 +41,18 @@ const CustomerScreen = () => {
   
   const renderItem = ({ item }) => {
     const dataItem = activeData[item];
+    let vehicleText;
+    const vehicleTypeTable = {
+        "car": "Car",
+        "motorcycle": "Motorcycle"
+    }
+
+    for (const key in vehicleTypeTable) {
+        if (key === dataItem.vehicle_type) {
+            vehicleText = vehicleTypeTable[key];
+            break;
+        }
+    }
     return (
       <TouchableOpacity style={styles.card}>
         <View style={styles.customerItemTitle}>
@@ -61,6 +73,10 @@ const CustomerScreen = () => {
           <View style={styles.customerItemDescription}>
             <Text style={styles.customerItemDescriptionText}>Discount: </Text>
             <Text style={styles.customerItemDescriptionText_1}>{dataItem.discount}</Text>
+          </View>
+          <View style={styles.customerItemDescription}>
+            <Text style={styles.customerItemDescriptionText}>Vehicle Type: </Text>
+            <Text style={styles.customerItemDescriptionText_1}>{vehicleText}</Text>
           </View>
         </View>
       </TouchableOpacity>
