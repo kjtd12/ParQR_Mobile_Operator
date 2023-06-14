@@ -138,11 +138,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
             if (discountType !== "none") {
               const discountSettings = parkingSettingsData[discountType];
-
-              console.log('Discount: ', discountSettings);
   
               additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
-              console.log("Hours: " + additionalHoursWithCostFree);
   
               if (duration == discountSettings.costfree_amount) {
                 paymentAmount = parseInt(0);
@@ -158,8 +155,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
               }
   
-              console.log('Amount:' + paymentAmount);
-  
               if (discountSettings) {
                 if (discountSettings.discount_by === 'Percentage') {
                   const discountPercentage = parseFloat(discountSettings.amount) / 100;
@@ -173,7 +168,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                   paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
                 }
               }
-              console.log('Amount:' + paymentAmount);
             } 
           });
           
@@ -384,19 +378,14 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
             if (discountType !== "none") {
               const discountSettings = parkingSettingsData[discountType];
-
-              console.log('Discount: ', discountSettings);
   
               additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
-              console.log("Hours: " + additionalHoursWithCostFree);
   
               if (duration == discountSettings.costfree_amount) {
-                console.log("Shit1");
                 paymentAmount = parseInt(0);
               }
   
               if (durationInHours < discountSettings.costfree_amount && durationInSecs <= discountSettings.costfree_amount) {
-                console.log("Shit2");
                 paymentAmount = 0;
               } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
                 paymentAmount = 30;
@@ -405,8 +394,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
               if (additionalHoursWithCostFree > 0) {
                 paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
               }
-  
-              console.log('Amount Test:' + paymentAmount);
   
               if (discountSettings) {
                 if (discountSettings.discount_by === 'Percentage') {
@@ -421,7 +408,6 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                   paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
                 }
               }
-              console.log('Amount:' + paymentAmount);
             } 
           });
 
