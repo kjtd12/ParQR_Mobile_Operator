@@ -141,11 +141,11 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   
               additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
   
-              if (duration == discountSettings.costfree_amount) {
+              if (duration == discountSettings.costfree_amount && durationInMinutes == 0) {
                 paymentAmount = parseInt(0);
               }
   
-              if (durationInHours < discountSettings.costfree_amount) {
+              if (durationInHours <= discountSettings.costfree_amount) {
                 paymentAmount = 0;
               } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
                 paymentAmount = 30;
@@ -381,11 +381,11 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
   
               additionalHoursWithCostFree = Math.max(Math.max(durationInHours - parseInt(discountSettings.costfree_amount), 0) - parseInt(initialHours), 0);
   
-              if (duration == discountSettings.costfree_amount) {
+              if (duration == discountSettings.costfree_amount && durationInMinutes == 0) {
                 paymentAmount = parseInt(0);
               }
   
-              if (durationInHours < discountSettings.costfree_amount && durationInSecs <= discountSettings.costfree_amount) {
+              if (durationInHours <= discountSettings.costfree_amount) {
                 paymentAmount = 0;
               } else if (additionalHoursWithCostFree === 0 && durationInMinutes > 0) {
                 paymentAmount = 30;
