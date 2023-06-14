@@ -400,12 +400,12 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                   const discountPercentage = parseFloat(discountSettings.amount) / 100;
                   let discountablePaymentAmount = paymentAmount;
                   discountablePaymentAmount -= discountablePaymentAmount * discountPercentage;
-                  paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+                  paymentAmount = parseFloat(Math.max(discountablePaymentAmount, 0));
                 } else if (discountSettings.discount_by === 'Deduct') {
                   const discountAmount = parseFloat(discountSettings.amount);
                   let discountablePaymentAmount = paymentAmount;
                   discountablePaymentAmount -= discountAmount;
-                  paymentAmount = parseInt(Math.max(discountablePaymentAmount, 0));
+                  paymentAmount = parseFloat(Math.max(discountablePaymentAmount, 0));
                 }
               }
             } 
