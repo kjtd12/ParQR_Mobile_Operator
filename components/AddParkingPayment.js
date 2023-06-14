@@ -174,11 +174,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 }
               }
               console.log('Amount:' + paymentAmount);
-            }
-
-            if (additionalHoursWithCostFree > 0) {
-              paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
-            }
+            } 
           });
           
           await userRef.update({
@@ -426,10 +422,7 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 }
               }
               console.log('Amount:' + paymentAmount);
-            }
-            if (additionalHoursWithCostFree > 0) {
-              paymentAmount += additionalHoursWithCostFree * parseInt(incrementalPayment);
-            }
+            } 
           });
 
           setPayment(paymentAmount);
