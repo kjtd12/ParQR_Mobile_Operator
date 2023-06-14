@@ -123,8 +123,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
           const discountSnapshot = await discountRef.once('value');
           const discountType = discountSnapshot.val();
       
-          const durationInHours = Math.floor(duration / (60 * 60));
-          const durationInMinutes = Math.floor((durationInHours % 3600) / 60);
+          const durationInHours = Math.ceil(duration / (60 * 60));
+          const durationInMinutes = Math.ceil((durationInHours % 3600) / 60);
           let additionalHoursWithCostFree;
 
           let paymentAmount = parseInt(initialPayment);
@@ -363,8 +363,8 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
 
           duration = (new Date().getTime() - parkingTimeData.start_time)/1000;
       
-          const durationInHours = Math.floor(duration / (60 * 60));
-          const durationInMinutes = Math.floor((durationInHours % 3600) / 60);
+          const durationInHours = Math.ceil(duration / (60 * 60));
+          const durationInMinutes = Math.ceil((durationInHours % 3600) / 60);
           let additionalHoursWithCostFree;
 
           let paymentAmount = parseInt(initialPayment);
