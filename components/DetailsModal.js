@@ -11,7 +11,7 @@ const DetailsModal = ({ isVisible, onClose, item, operator }) => {
     const startTime = startTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     const endTime = endTimeDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
-    const formattedPrice = payment ? parsedPayment.toFixed(2) : '0.00';
+    const formattedPrice = payment ? payment.toFixed(2) : '0.00';
 
     const durationInSeconds = (endTimeDate - startTimeDate) / 1000;
     const durationInMinutes = Math.floor(durationInSeconds / 60);
