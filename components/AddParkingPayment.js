@@ -166,7 +166,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                   paymentAmount = parseFloat(Math.max(discountablePaymentAmount, 0));
                 }
               }
-            } 
+            } else {
+              paymentAmount += (durationInHours - initialHours) * parseInt(incrementalPayment);
+            }
           });
           
           await userRef.update({
@@ -404,7 +406,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                   paymentAmount = parseFloat(Math.max(discountablePaymentAmount, 0));
                 }
               }
-            } 
+            } else {
+              paymentAmount += (durationInHours - initialHours) * parseInt(incrementalPayment);
+            }
           });
 
           setPayment(paymentAmount);
