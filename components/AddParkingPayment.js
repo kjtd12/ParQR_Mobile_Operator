@@ -167,6 +167,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 }
               }
             } else {
+              if (customerVal.vehicle_type === "motorcycle") {
+                paymentAmount -= motorcycleDeduct;
+              }
               paymentAmount += (durationInHours - initialHours) * parseInt(incrementalPayment);
             }
           });
@@ -407,6 +410,9 @@ export default function AddParkingPayment({ userId, operatorName, operatorUid })
                 }
               }
             } else {
+              if (customerVal.vehicle_type === "motorcycle") {
+                paymentAmount -= motorcycleDeduct;
+              }
               paymentAmount += (durationInHours - initialHours) * parseInt(incrementalPayment);
             }
           });
